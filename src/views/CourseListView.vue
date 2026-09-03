@@ -7,12 +7,9 @@
         <div>
           <p class="path"><span>~</span>/courses</p>
           <h1>스킬 목록</h1>
-          <p v-if="isAuthor" class="page-description">
-            등록한 스킬을 확인하고 새 스킬을 추가할 수 있습니다.
-          </p>
-          <p v-else class="page-description">원하는 분야의 스킬을 빠르게 탐색하세요.</p>
+          <p class="page-description">원하는 분야의 스킬을 빠르게 탐색하고, 새 스킬을 등록해 보세요.</p>
         </div>
-        <router-link v-if="isAuthor" to="/courses/new" class="create-link">
+        <router-link to="/courses/new" class="create-link">
           <span aria-hidden="true">+</span> 스킬 등록
         </router-link>
       </header>
@@ -103,7 +100,7 @@
           <h2>{{ hasActiveFilter ? '검색 결과가 없습니다.' : '등록된 스킬이 없습니다.' }}</h2>
           <p v-if="hasActiveFilter">검색어나 카테고리를 바꿔 다시 확인해 보세요.</p>
           <button v-if="hasActiveFilter" type="button" class="retry-button" @click="resetFilters">필터 초기화</button>
-          <router-link v-else-if="isAuthor" to="/courses/new" class="retry-button">첫 스킬 등록하기</router-link>
+          <router-link v-else to="/courses/new" class="retry-button">첫 스킬 등록하기</router-link>
         </div>
       </section>
     </main>
@@ -116,19 +113,16 @@ import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
 import { useAssetStore } from '@/store/course.js'
-import { useAuthStore } from '@/store/auth.js'
 
 const route = useRoute()
 const router = useRouter()
 const assetStore = useAssetStore()
-const auth = useAuthStore()
 const { assets, loading, error, selectedCategory } = storeToRefs(assetStore)
 
 const categories = assetStore.categories
 const searchInput = ref(null)
 const searchQuery = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const normalizedQuery = computed(() => searchQuery.value.trim().toLocaleLowerCase())
-const isAuthor = computed(() => ['INSTRUCTOR', 'AUTHOR'].includes(auth.user?.role))
 
 const categoryCounts = computed(() => {
   const counts = Object.fromEntries(categories.map(category => [category, 0]))

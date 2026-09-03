@@ -292,11 +292,6 @@ function handleLogout() {
 function validateForm() {
   validationError.value = "";
 
-  if (!auth.user || auth.user.role !== "INSTRUCTOR") {
-    validationError.value = "스킬 등록 권한이 없습니다.";
-    return false;
-  }
-
   if (!form.title) {
     validationError.value = "제목을 입력해 주세요.";
     return false;

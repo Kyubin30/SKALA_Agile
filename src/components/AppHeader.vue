@@ -9,8 +9,9 @@
 
       <!-- 네비게이션 -->
       <nav class="nav-links" v-if="auth.isAuthenticated">
-        <router-link to="/courses" class="nav-link" :class="{ active: $route.path.startsWith('/courses') || $route.path.startsWith('/assets') }">스킬</router-link>
+        <router-link to="/courses" class="nav-link" :class="{ active: ($route.path.startsWith('/courses') && $route.path !== '/courses/new') || $route.path.startsWith('/assets') }">스킬</router-link>
         <router-link to="/enrollments" class="nav-link" :class="{ active: $route.path === '/enrollments' }">내 스킬</router-link>
+        <router-link to="/courses/new" class="nav-link" :class="{ active: $route.path === '/courses/new' }">스킬 등록</router-link>
       </nav>
 
       <!-- 우측 액션 -->
