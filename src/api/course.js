@@ -17,7 +17,8 @@ export const courseApi = {
     return api.post('/api/courses', data)
   },
 
-  update(id, data) {
-    return api.put(`/api/courses/${id}`, data)
-  }
+  // swagger에 존재하지 않음
+  // update(id, data) {
+  //   return api.put(`/api/courses/${id}`, data)
+  // }
 }

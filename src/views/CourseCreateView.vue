@@ -21,7 +21,7 @@
             class="sidebar-item"
             :class="{ active: $route.path === '/courses/new' }"
           >
-            <span class="si-icon">✍️</span> 강의 등록
+            <span class="si-icon">📦</span> 자산 등록
           </router-link>
 
           <router-link to="/mypage" class="sidebar-item">
@@ -31,9 +31,11 @@
 
         <div class="sidebar-section">
           <div class="sidebar-label">계정</div>
+
           <router-link to="/mypage" class="sidebar-item">
             <span class="si-icon">👤</span> 마이페이지
           </router-link>
+
           <button class="sidebar-item sidebar-btn" @click="handleLogout">
             <span class="si-icon">🚪</span> 로그아웃
           </button>
@@ -44,43 +46,69 @@
       <main class="main-content">
         <div class="content-header">
           <div>
-            <h1 class="page-title">강의 등록</h1>
-            <p class="page-subtitle">강사 계정으로 새로운 강의를 등록합니다.</p>
+            <h1 class="page-title">자산 등록</h1>
+            <p class="page-subtitle">
+              등록할 자산의 정보를 입력해 주세요.
+            </p>
           </div>
         </div>
 
         <div class="form-card">
-          <form class="course-form" @submit.prevent="handleSubmit">
+          <div class="step-header">
+            <h2>자산 정보 작성</h2>
+            <p>등록할 자산의 기본 정보를 입력해 주세요.</p>
+          </div>
+
+          <div class="asset-form">
+            <!-- 제목 -->
             <div class="form-group">
-              <label class="form-label" for="title">강의명</label>
+              <label class="form-label" for="title">
+                제목 <span class="required">*</span>
+              </label>
+
               <input
                 id="title"
                 v-model.trim="form.title"
                 type="text"
                 class="form-input"
-                placeholder="예: Cloud Native App기반 Web Service 개발"
+                placeholder="예: Spring Boot 로그인 API 구현"
                 maxlength="100"
               />
             </div>
 
+            <!-- 본문 -->
             <div class="form-group">
-              <label class="form-label" for="description">강의 설명</label>
+              <label class="form-label" for="description">
+                본문 <span class="required">*</span>
+              </label>
+
               <textarea
                 id="description"
                 v-model.trim="form.description"
                 class="form-textarea"
-                rows="6"
-                placeholder="강의 소개, 학습 목표, 대상 등을 입력해 주세요."
+                rows="8"
+                placeholder="자산의 내용, 사용 방법, 설명 등을 입력해 주세요."
               ></textarea>
             </div>
 
+            <!-- 자산 유형 / 등급 -->
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="category">카테고리</label>
-                <select id="category" v-model="form.category" class="form-select">
-                  <option disabled value="">카테고리를 선택하세요</option>
+                <label class="form-label" for="assetType">
+                  자산 유형 <span class="required">*</span>
+                </label>
+
+                <select
+                  id="assetType"
+                  v-model="form.assetType"
+                  class="form-select"
+                >
+                  <option disabled value="">
+                    자산 유형을 선택하세요
+                  </option>
+
                   <option
-                    v-for="option in categoryOptions"
+                    v-for="option in assetTypeOptions"
                     :key="option.value"
                     :value="option.value"
                   >
@@ -90,42 +118,100 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="price">가격</label>
-                <input
-                  id="price"
-                  v-model.number="form.price"
-                  type="number"
-                  min="0"
-                  step="1000"
-                  class="form-input"
-                  placeholder="예: 50000"
-                />
+                <label class="form-label" for="grade">
+                  등급 <span class="required">*</span>
+                </label>
+
+                <select
+                  id="grade"
+                  v-model="form.grade"
+                  class="form-select"
+                >
+                  <option disabled value="">
+                    등급을 선택하세요
+                  </option>
+
+                  <option
+                    v-for="option in gradeOptions"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
               </div>
             </div>
 
-            <div v-if="validationError" class="error-box">
-              {{ validationError }}
+            <!-- 설치 명령 -->
+            <div class="form-group">
+              <label class="form-label" for="installCommand">
+                설치 명령
+              </label>
+
+              <input
+                id="installCommand"
+                v-model.trim="form.installCommand"
+                type="text"
+                class="form-input code-input"
+                placeholder="예: npm install axios"
+              />
+
+              <p class="form-help">
+                자산을 사용하기 위해 필요한 설치 명령이 있다면 입력해 주세요.
+              </p>
             </div>
 
-            <div v-if="submitError" class="error-box">
-              {{ submitError }}
-            </div>
+            <!-- 분야 -->
+            <div class="form-group">
+              <label class="form-label" for="category">
+                분야 <span class="required">*</span>
+              </label>
 
-            <div v-if="submitSuccess" class="success-box">
-              {{ submitSuccess }}
-            </div>
+              <select
+                id="category"
+                v-model="form.category"
+                class="form-select"
+              >
+                <option disabled value="">
+                  분야를 선택하세요
+                </option>
 
-            <div class="form-actions">
-              <router-link to="/courses" class="btn btn-ghost">
-                취소
-              </router-link>
-
-              <button type="submit" class="btn btn-primary" :disabled="submitting">
-                <span v-if="submitting">등록 중...</span>
-                <span v-else>강의 등록</span>
-              </button>
+                <option
+                  v-for="option in categoryOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </select>
             </div>
-          </form>
+          </div>
+
+          <!-- 에러 -->
+          <div v-if="validationError" class="error-box">
+            {{ validationError }}
+          </div>
+
+          <div v-if="submitError" class="error-box">
+            {{ submitError }}
+          </div>
+
+          <!-- 버튼 -->
+          <div class="form-actions">
+            <router-link to="/courses" class="btn btn-ghost">
+              취소
+            </router-link>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              :disabled="submitting"
+              @click="createCourse"
+            >
+              <span v-if="submitting">등록 중...</span>
+              <span v-else>자산 등록</span>
+            </button>
+          </div>
         </div>
       </main>
     </div>
@@ -133,117 +219,154 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import AppHeader from '@/components/AppHeader.vue'
-import { courseApi } from '@/api/course.js'
-import { useAuthStore } from '@/store/auth.js'
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import AppHeader from "@/components/AppHeader.vue";
+import { courseApi } from "@/api/course.js";
+import { useAuthStore } from "@/store/auth.js";
 
-const router = useRouter()
-const auth = useAuthStore()
+const router = useRouter();
+const auth = useAuthStore();
+
+/* =========================
+   상태
+========================= */
+
+const submitting = ref(false);
+const validationError = ref("");
+const submitError = ref("");
+
+const courseId = ref(null);
+
+/* =========================
+   작성 데이터
+========================= */
 
 const form = reactive({
-  title: '',
-  description: '',
-  category: '',
-  price: null
-})
+  title: "",
+  description: "",
+  assetType: "",
+  grade: "",
+  installCommand: "",
+  category: "",
+});
 
-const submitting = ref(false)
-const validationError = ref('')
-const submitError = ref('')
-const submitSuccess = ref('')
+/* =========================
+   선택지
+========================= */
+
+const assetTypeOptions = [
+  { label: "코드", value: "CODE" },
+  { label: "문서", value: "DOCUMENT" },
+  { label: "템플릿", value: "TEMPLATE" },
+  { label: "프로젝트", value: "PROJECT" },
+  { label: "기타", value: "ETC" },
+];
+
+const gradeOptions = [
+  { label: "실험용", value: "EXPERIMENTAL" },
+  { label: "개발용", value: "DEVELOPMENT" },
+  { label: "운영용", value: "PRODUCTION" },
+];
 
 const categoryOptions = [
-  { label: '백엔드', value: 'BACKEND' },
-  { label: '프론트엔드', value: 'FRONTEND' },
-  { label: 'DevOps', value: 'DEVOPS' },
-  { label: 'AI / 데이터', value: 'DATA_SCIENCE' }
-]
+  { label: "백엔드", value: "BACKEND" },
+  { label: "프론트엔드", value: "FRONTEND" },
+  { label: "DevOps", value: "DEVOPS" },
+  { label: "AI / 데이터", value: "DATA_SCIENCE" },
+];
+
+/* =========================
+   로그아웃
+========================= */
 
 function handleLogout() {
-  auth.logout()
-  router.push('/')
+  auth.logout();
+  router.push("/");
 }
 
-function validateForm() {
-  validationError.value = ''
+/* =========================
+   Validation
+========================= */
 
-  if (!auth.user || auth.user.role !== 'INSTRUCTOR') {
-    validationError.value = '강사 계정만 강의를 등록할 수 있습니다.'
-    return false
+function validateForm() {
+  validationError.value = "";
+
+  if (!auth.user || auth.user.role !== "INSTRUCTOR") {
+    validationError.value = "자산 등록 권한이 없습니다.";
+    return false;
   }
 
   if (!form.title) {
-    validationError.value = '강의명을 입력해 주세요.'
-    return false
+    validationError.value = "제목을 입력해 주세요.";
+    return false;
   }
 
   if (!form.description) {
-    validationError.value = '강의 설명을 입력해 주세요.'
-    return false
+    validationError.value = "본문을 입력해 주세요.";
+    return false;
+  }
+
+  if (!form.assetType) {
+    validationError.value = "자산 유형을 선택해 주세요.";
+    return false;
+  }
+
+  if (!form.grade) {
+    validationError.value = "등급을 선택해 주세요.";
+    return false;
   }
 
   if (!form.category) {
-    validationError.value = '카테고리를 선택해 주세요.'
-    return false
+    validationError.value = "분야를 선택해 주세요.";
+    return false;
   }
 
-  if (form.price === null || form.price === undefined || form.price === '') {
-    validationError.value = '가격을 입력해 주세요.'
-    return false
-  }
-
-  const price = Number(form.price)
-  if (Number.isNaN(price) || price < 0) {
-    validationError.value = '가격은 0 이상의 숫자로 입력해 주세요.'
-    return false
-  }
-
-  return true
+  return true;
 }
 
-async function handleSubmit() {
-  submitError.value = ''
-  submitSuccess.value = ''
+/* =========================
+   자산 등록
+========================= */
 
-  if (!validateForm()) return
+async function createCourse() {
+  if (!validateForm()) return;
 
-  submitting.value = true
+  submitting.value = true;
+  validationError.value = "";
+  submitError.value = "";
 
   try {
     const payload = {
       title: form.title,
       description: form.description,
       category: form.category,
-      price: Number(form.price)
+      price: 0,
+    };
+
+    const res = await courseApi.create(payload);
+
+    console.log("[AssetCreate] create response =", res.data);
+
+    const createdId = res.data?.data?.id ?? res.data?.id;
+
+    if (!createdId) {
+      throw new Error("생성된 자산 ID를 받지 못했습니다.");
     }
 
-    const res = await courseApi.create(payload)
-    console.log('[CourseCreate] create response =', res.data)
+    courseId.value = createdId;
 
-    submitSuccess.value = '강의가 성공적으로 등록되었습니다.'
-
-    const createdCourseId =
-      res.data?.data?.id ??
-      res.data?.id
-
-    if (createdCourseId) {
-      setTimeout(() => {
-        router.push(`/courses/${createdCourseId}`)
-      }, 500)
-    } else {
-      setTimeout(() => {
-        router.push('/courses')
-      }, 500)
-    }
+    // 등록된 자산 상세 페이지로 이동
+    router.push(`/courses/${courseId.value}`);
   } catch (error) {
-    console.error('[CourseCreate] create failed:', error)
+    console.error("[AssetCreate] create failed:", error);
+
     submitError.value =
       error.response?.data?.message ||
-      '강의 등록에 실패했습니다.'
+      error.message ||
+      "자산 등록에 실패했습니다.";
   } finally {
-    submitting.value = false
+    submitting.value = false;
   }
 }
 </script>
@@ -263,7 +386,10 @@ async function handleSubmit() {
   gap: 28px;
 }
 
-/* 사이드바 */
+/* =========================
+   Sidebar
+========================= */
+
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -319,11 +445,10 @@ async function handleSubmit() {
   font-size: 15px;
 }
 
-.sidebar-btn {
-  color: var(--color-text-secondary);
-}
+/* =========================
+   Main
+========================= */
 
-/* 메인 */
 .main-content {
   min-width: 0;
 }
@@ -344,15 +469,39 @@ async function handleSubmit() {
   color: var(--color-text-muted);
 }
 
+/* =========================
+   Card
+========================= */
+
 .form-card {
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 28px;
   box-shadow: var(--shadow-sm);
 }
 
-.course-form {
+.step-header {
+  margin-bottom: 26px;
+}
+
+.step-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.step-header p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* =========================
+   Form
+========================= */
+
+.asset-form {
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -374,6 +523,10 @@ async function handleSubmit() {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-text-primary);
+}
+
+.required {
+  color: #dc2626;
 }
 
 .form-input,
@@ -401,11 +554,25 @@ async function handleSubmit() {
 
 .form-textarea {
   resize: vertical;
-  min-height: 140px;
+  min-height: 160px;
   line-height: 1.5;
 }
 
+.code-input {
+  font-family: monospace;
+}
+
+.form-help {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* =========================
+   Error
+========================= */
+
 .error-box {
+  margin-top: 18px;
   background: #fef2f2;
   color: #dc2626;
   border-radius: var(--radius-md);
@@ -413,20 +580,20 @@ async function handleSubmit() {
   font-size: 13px;
 }
 
-.success-box {
-  background: #ecfdf3;
-  color: #15803d;
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  font-size: 13px;
-}
+/* =========================
+   Buttons
+========================= */
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 6px;
+  margin-top: 28px;
 }
+
+/* =========================
+   Responsive
+========================= */
 
 @media (max-width: 992px) {
   .page-layout {
