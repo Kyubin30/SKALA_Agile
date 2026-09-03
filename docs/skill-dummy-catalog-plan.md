@@ -145,15 +145,27 @@ Course 등록 API는 `title`, `description`, `category`, `price`만 받는다. �
 
 `courses.api.seed.json`의 각 원소는 `POST /api/courses`에 그대로 보낼 수 있다. SQL 초기화가 필요하면 같은 데이터가 담긴 `courses.sql.seed.sql`을 기존 `init-db`에 추가한다.
 
-`description`은 백엔드에서 일반 문자열로 저장·반환한다. 프런트에서는 다음 방식으로 해석하고, JSON 파싱에 실패하면 기존 일반 강의 설명으로 처리한다.
+팀원 자산 등록 화면의 추가 입력도 같은 JSON 안에 보존한다.
 
-```js
-let metadata = null
-try {
-  const parsed = JSON.parse(course.description)
-  if (parsed.format === 'SKILL_DESCRIPTION_V1') metadata = parsed
-} catch {
-  // 기존 일반 강의 설명은 그대로 표시
+| 등록 화면 필드 | `description` JSON 필드 |
+|---|---|
+| 자산 유형 | `assetType` |
+| 등급 | `grade` |
+| 설치 명령 | `installCommand` |
+| 본문 | `body`, 카드용 요약은 `shortDescription` |
+
+24개 더미 스킬은 모두 가상·미검증 데이터이므로 `grade=EXPERIMENTAL`, `installCommand=""`로 생성한다. `skillType`은 화면의 기존 자산 유형에 맞게 `CODE`, `DOCUMENT`, `TEMPLATE`, `ETC` 중 하나로 변환하지만 원래 값도 함께 보존한다.
+
+`description`은 백엔드에서 일반 문자열로 저장·반환한다. 이 작업은 데이터 생성까지만 담당하며 프런트·백엔드 구현은 변경하지 않는다. 화면에서 상세 메타데이터가 필요할 경우 소비 측에서 `format === "SKILL_DESCRIPTION_V1"`인 문자열만 JSON으로 해석하고, 그 외 설명은 기존 문자열로 처리한다.
+
+```json
+{
+  "format": "SKILL_DESCRIPTION_V1",
+  "assetType": "TEMPLATE",
+  "grade": "EXPERIMENTAL",
+  "shortDescription": "카드에 표시할 요약",
+  "demoInput": {},
+  "demoOutput": {}
 }
 ```
 

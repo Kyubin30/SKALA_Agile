@@ -19,6 +19,13 @@ const backendCategories = new Set([
   'OTHER'
 ])
 
+function encodeSkillDescription(metadata) {
+  return JSON.stringify({
+    ...metadata,
+    format: 'SKILL_DESCRIPTION_V1'
+  })
+}
+
 const source = JSON.parse(await readFile(sourcePath, 'utf8'))
 
 if (!Array.isArray(source.skills) || source.skills.length === 0) {
@@ -53,11 +60,25 @@ for (const skill of source.skills) {
   }
 }
 
+const assetTypeBySkillType = {
+  PROMPT: 'DOCUMENT',
+  STRUCTURED: 'TEMPLATE',
+  CHECKLIST: 'TEMPLATE',
+  CODE_TRANSFORM: 'CODE',
+  DIAGNOSTIC: 'ETC',
+  VISUAL_SPEC: 'TEMPLATE'
+}
+
 function buildDescription(skill) {
-  return JSON.stringify({
-    format: 'SKILL_DESCRIPTION_V1',
+  const assetType = assetTypeBySkillType[skill.skillType]
+  if (!assetType) throw new Error(`unsupported skill type: ${skill.slug} -> ${skill.skillType}`)
+
+  return encodeSkillDescription({
     sourceId: skill.id,
     slug: skill.slug,
+    assetType,
+    grade: 'EXPERIMENTAL',
+    installCommand: '',
     domain: skill.domain,
     lifecycleStage: skill.lifecycleStage,
     skillType: skill.skillType,
