@@ -56,7 +56,7 @@
 
         <div v-if="loading" class="course-list" aria-label="스킬 목록을 불러오는 중" aria-busy="true">
           <div class="list-head" aria-hidden="true">
-            <span>스킬</span><span>분야</span><span>유형</span><span>선택 수</span><span>등급</span>
+            <span>스킬</span><span>분야</span><span>등록자</span><span>선택 수</span><span>등급</span>
           </div>
           <div v-for="i in 6" :key="i" class="skeleton-row">
             <span class="skeleton wide"></span><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton short"></span><span class="skeleton"></span>
@@ -74,7 +74,7 @@
           <div class="list-head" aria-hidden="true">
             <span>스킬</span>
             <span>분야</span>
-            <span>유형</span>
+            <span>등록자</span>
             <span class="align-right">선택 수</span>
             <span class="align-right">등급</span>
           </div>
@@ -89,7 +89,7 @@
               <span>{{ asset.title }}</span>
             </span>
             <span class="category">{{ asset.category || '-' }}</span>
-            <span class="instructor">{{ asset.assetTypeLabel || '-' }}</span>
+            <span class="instructor">{{ asset.authorName || asset.instructorName || '-' }}</span>
             <span class="enrollment">{{ formatCount(asset.enrollmentCount) }}</span>
             <span class="price">{{ asset.gradeLabel || '-' }}</span>
           </router-link>

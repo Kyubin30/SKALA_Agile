@@ -25,12 +25,15 @@
               <span>선택 수: {{ displayEnrollmentCount }}</span>
               <span>최종 수정: {{ displayUpdatedAt }}</span>
             </div>
-            <button v-if="isAuthor" class="btn btn-outline" @click="goToEdit">스킬 수정</button>
+            <div class="detail-actions">
+              <button
+                class="btn btn-primary"
+                :disabled="requesting || registerDisabled"
+                @click="handleRegisterClick"
+              >{{ registerButtonLabel }}</button>
+              <button v-if="isAuthor" class="btn btn-outline" @click="goToEdit">스킬 수정</button>
+            </div>
           </div>
-          <aside class="asset-image" :class="thumbBg">
-            <img v-if="thumbSrc" :src="thumbSrc" :alt="asset.title" />
-            <span v-else>{{ displayAssetType.charAt(0) }}</span>
-          </aside>
         </div>
       </section>
 
@@ -121,16 +124,15 @@ const isAuthor = computed(() => {
 })
 
 const categoryConfig = {
-  '백엔드': { badge: 'badge-teal', bg: 'thumb-teal', thumb: 'spring_boot' },
-  '프론트엔드': { badge: 'badge-teal', bg: 'thumb-teal', thumb: 'vue_js' },
-  DevOps: { badge: 'badge-blue', bg: 'thumb-blue', thumb: 'kubernetes' },
-  '데이터': { badge: 'badge-purple', bg: 'thumb-purple', thumb: 'python' },
-  AI: { badge: 'badge-pink', bg: 'thumb-pink', thumb: 'generative_ai' }
+  '백엔드': { badge: 'badge-teal' },
+  '프론트엔드': { badge: 'badge-teal' },
+  DevOps: { badge: 'badge-blue' },
+  '데이터': { badge: 'badge-purple' },
+  AI: { badge: 'badge-pink' }
 }
 const assetTypeLabels = { INSTRUCTION: '작업 지침서', RULE: '회사 규칙', AUTOMATION: '자동화 설정' }
 const config = computed(() => categoryConfig[asset.value?.category] || {})
 const badgeClass = computed(() => config.value.badge || 'badge-gray')
-const thumbBg = computed(() => config.value.bg || 'thumb-gray')
 const displayCategory = computed(() => asset.value?.category || '기타')
 const displayAssetType = computed(() => assetTypeLabels[asset.value?.assetType] || asset.value?.assetType || '작업 지침서')
 const displayGrade = computed(() => grade.value === 'RESTRICTED' ? '제한' : '공개')
@@ -147,10 +149,15 @@ const installState = computed(() => {
   return 'REQUESTABLE'
 })
 const availabilityLabel = computed(() => ({ GUEST: '로그인 필요', AVAILABLE: '설치 가능', REQUESTABLE: '승인 필요', PENDING: '승인 대기', REJECTED: '반려됨' }[installState.value]))
-const thumbSrc = computed(() => {
-  const key = asset.value?.thumbnail || config.value.thumb
-  return key ? new URL(`../assets/images/courses/${key}.png`, import.meta.url).href : null
+const registerButtonLabel = computed(() => {
+  if (requesting.value) return '요청 중...'
+  if (installState.value === 'GUEST') return '로그인하고 등록'
+  if (enrollmentStatus.value === 'ACTIVE') return '등록됨'
+  if (enrollmentStatus.value === 'PENDING') return '승인 대기 중'
+  if (enrollmentStatus.value === 'CANCELLED') return '다시 등록 요청'
+  return '스킬 등록'
 })
+const registerDisabled = computed(() => enrollmentStatus.value === 'ACTIVE' || enrollmentStatus.value === 'PENDING')
 const relatedAssets = computed(() => assetStore.assets
   .filter(item => Number(item.id) !== Number(asset.value?.id) && item.category === asset.value?.category && item.status !== 'DRAFT')
   .sort((a, b) => Number(b.enrollmentCount || 0) - Number(a.enrollmentCount || 0)).slice(0, 3))
@@ -203,6 +210,10 @@ async function copyInstallCommand() {
 function startPolling() { stopPolling(); pollingTimer = window.setInterval(loadEnrollmentStatus, 3000) }
 function stopPolling() { if (pollingTimer) window.clearInterval(pollingTimer); pollingTimer = null }
 function goToLogin() { router.push({ name: 'Login', query: { redirect: route.fullPath } }) }
+function handleRegisterClick() {
+  if (installState.value === 'GUEST') return goToLogin()
+  requestAccess()
+}
 function goToEdit() { router.push(`/assets/${asset.value.id}/edit`) }
 async function loadPage() {
   stopPolling(); enrollment.value = null; actionError.value = ''
@@ -226,5 +237,5 @@ onBeforeUnmount(stopPolling)
 </script>
 
 <style scoped>
-.page-wrapper{min-height:100vh;background:var(--color-bg-secondary)}.detail-layout{padding-bottom:72px}.deprecated-banner{max-width:1100px;margin:24px auto 0;padding:16px 20px;display:flex;justify-content:space-between;gap:20px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:var(--radius-md)}.deprecated-banner p{margin-top:3px;font-size:13px}.detail-hero{padding:56px 0 46px;background:linear-gradient(135deg,var(--color-bg-tertiary),var(--color-bg-primary));border-bottom:1px solid var(--color-border)}.detail-hero-inner,.install-section,.related-section{max-width:1100px;margin:0 auto;padding:0 24px}.detail-hero-inner{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:52px;align-items:center}.detail-info{display:flex;flex-direction:column;align-items:flex-start;gap:16px}.badge-row{display:flex;flex-wrap:wrap;gap:8px}.badge{padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}.badge-neutral,.badge-gray{background:#f1f5f9;color:#475569}.badge-green{background:#dcfce7;color:#166534}.badge-amber{background:#fef3c7;color:#92400e}.badge-danger{background:#fee2e2;color:#b91c1c}.badge-teal{background:#ccfbf1;color:#0f766e}.badge-blue{background:#dbeafe;color:#1d4ed8}.badge-purple{background:#ede9fe;color:#6d28d9}.badge-pink{background:#fce7f3;color:#be185d}.detail-title{font-size:clamp(30px,5vw,44px);line-height:1.2}.ai-summary{padding-left:12px;color:var(--color-primary);font-size:17px;font-weight:600;border-left:3px solid var(--color-primary)}.detail-desc{max-width:720px;color:var(--color-text-secondary);line-height:1.8;white-space:pre-line}.detail-meta{display:flex;flex-wrap:wrap;gap:18px;color:var(--color-text-secondary);font-size:13px}.asset-image{height:250px;display:flex;justify-content:center;align-items:center;border-radius:var(--radius-lg);box-shadow:var(--shadow-md)}.asset-image img{width:100%;height:100%;padding:36px;object-fit:contain}.asset-image span{font-size:64px;font-weight:800;color:var(--color-text-muted)}.thumb-teal{background:#e1f5ee}.thumb-blue{background:#e6f1fb}.thumb-purple{background:#eeedfe}.thumb-pink{background:#fbeaf0}.thumb-gray{background:#f1efe8}.install-section,.related-section{margin-top:48px}.section-heading{margin-bottom:18px;display:flex;align-items:end;justify-content:space-between;gap:20px}.section-heading small{color:var(--color-primary);font-weight:800;letter-spacing:.12em}.section-heading h2{margin-top:4px;font-size:24px}.availability{padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#f1f5f9;color:#475569}.state-available{background:#dcfce7;color:#166534}.state-pending{background:#fef3c7;color:#92400e}.state-rejected{background:#fee2e2;color:#b91c1c}.install-card{min-height:250px;padding:34px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;background:var(--color-bg-primary);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}.install-card h3{font-size:20px}.install-card>p{color:var(--color-text-secondary);line-height:1.65}.lock{font-size:32px}.command-box{width:100%;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:#0f172a;color:#e2e8f0;border-radius:var(--radius-md);overflow:hidden}.command-box code{overflow-x:auto;white-space:nowrap}.blurred code{filter:blur(5px);user-select:none}.copy-button{flex-shrink:0;padding:7px 12px;color:#fff;background:#334155;border:0;border-radius:6px;cursor:pointer}.copy-button:disabled{opacity:.45;cursor:not-allowed}.pending{display:flex;align-items:center;gap:8px;color:#92400e;font-weight:700}.rejection{width:100%;padding:15px;color:#991b1b;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius-md)}.rejection p{margin-top:5px;font-size:13px}.error-msg{padding:9px 12px!important;color:#b91c1c!important;background:#fef2f2;border-radius:var(--radius-sm);font-size:13px}.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.related-card{min-height:170px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:11px;background:var(--color-bg-primary);border:1px solid var(--color-border);border-radius:var(--radius-lg);transition:var(--transition)}.related-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}.related-card p{display:-webkit-box;overflow:hidden;color:var(--color-text-secondary);font-size:13px;line-height:1.55;-webkit-box-orient:vertical;-webkit-line-clamp:2}.related-card small{margin-top:auto;color:var(--color-text-muted)}.loading-center{min-height:400px;display:flex;justify-content:center;align-items:center;gap:14px}.empty-state{flex-direction:column}.spinner{width:40px;height:40px;border:3px solid var(--color-border);border-top-color:var(--color-primary);border-radius:50%;animation:spin .8s linear infinite}.spinner.small{width:18px;height:18px;border-width:2px}@keyframes spin{to{transform:rotate(360deg)}}@media(max-width:760px){.detail-hero-inner{grid-template-columns:1fr}.asset-image{height:190px}.related-grid{grid-template-columns:1fr}.deprecated-banner{margin:16px;flex-direction:column}.install-card{padding:24px}}
+.page-wrapper{min-height:100vh;background:var(--color-bg-secondary)}.detail-layout{padding-bottom:72px}.deprecated-banner{max-width:1100px;margin:24px auto 0;padding:16px 20px;display:flex;justify-content:space-between;gap:20px;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:var(--radius-md)}.deprecated-banner p{margin-top:3px;font-size:13px}.detail-hero{padding:56px 0 46px;background:linear-gradient(135deg,var(--color-bg-tertiary),var(--color-bg-primary));border-bottom:1px solid var(--color-border)}.detail-hero-inner,.install-section,.related-section{max-width:1100px;margin:0 auto;padding:0 24px}.detail-hero-inner{display:grid;grid-template-columns:minmax(0,1fr);gap:52px;align-items:center}.detail-info{display:flex;flex-direction:column;align-items:flex-start;gap:16px}.detail-actions{display:flex;gap:10px}.badge-row{display:flex;flex-wrap:wrap;gap:8px}.badge{padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}.badge-neutral,.badge-gray{background:#f1f5f9;color:#475569}.badge-green{background:#dcfce7;color:#166534}.badge-amber{background:#fef3c7;color:#92400e}.badge-danger{background:#fee2e2;color:#b91c1c}.badge-teal{background:#ccfbf1;color:#0f766e}.badge-blue{background:#dbeafe;color:#1d4ed8}.badge-purple{background:#ede9fe;color:#6d28d9}.badge-pink{background:#fce7f3;color:#be185d}.detail-title{font-size:clamp(30px,5vw,44px);line-height:1.2}.ai-summary{padding-left:12px;color:var(--color-primary);font-size:17px;font-weight:600;border-left:3px solid var(--color-primary)}.detail-desc{max-width:720px;color:var(--color-text-secondary);line-height:1.8;white-space:pre-line}.detail-meta{display:flex;flex-wrap:wrap;gap:18px;color:var(--color-text-secondary);font-size:13px}.install-section,.related-section{margin-top:48px}.section-heading{margin-bottom:18px;display:flex;align-items:end;justify-content:space-between;gap:20px}.section-heading small{color:var(--color-primary);font-weight:800;letter-spacing:.12em}.section-heading h2{margin-top:4px;font-size:24px}.availability{padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#f1f5f9;color:#475569}.state-available{background:#dcfce7;color:#166534}.state-pending{background:#fef3c7;color:#92400e}.state-rejected{background:#fee2e2;color:#b91c1c}.install-card{min-height:250px;padding:34px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;background:var(--color-bg-primary);border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}.install-card h3{font-size:20px}.install-card>p{color:var(--color-text-secondary);line-height:1.65}.lock{font-size:32px}.command-box{width:100%;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:#0f172a;color:#e2e8f0;border-radius:var(--radius-md);overflow:hidden}.command-box code{overflow-x:auto;white-space:nowrap}.blurred code{filter:blur(5px);user-select:none}.copy-button{flex-shrink:0;padding:7px 12px;color:#fff;background:#334155;border:0;border-radius:6px;cursor:pointer}.copy-button:disabled{opacity:.45;cursor:not-allowed}.pending{display:flex;align-items:center;gap:8px;color:#92400e;font-weight:700}.rejection{width:100%;padding:15px;color:#991b1b;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius-md)}.rejection p{margin-top:5px;font-size:13px}.error-msg{padding:9px 12px!important;color:#b91c1c!important;background:#fef2f2;border-radius:var(--radius-sm);font-size:13px}.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.related-card{min-height:170px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:11px;background:var(--color-bg-primary);border:1px solid var(--color-border);border-radius:var(--radius-lg);transition:var(--transition)}.related-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}.related-card p{display:-webkit-box;overflow:hidden;color:var(--color-text-secondary);font-size:13px;line-height:1.55;-webkit-box-orient:vertical;-webkit-line-clamp:2}.related-card small{margin-top:auto;color:var(--color-text-muted)}.loading-center{min-height:400px;display:flex;justify-content:center;align-items:center;gap:14px}.empty-state{flex-direction:column}.spinner{width:40px;height:40px;border:3px solid var(--color-border);border-top-color:var(--color-primary);border-radius:50%;animation:spin .8s linear infinite}.spinner.small{width:18px;height:18px;border-width:2px}@keyframes spin{to{transform:rotate(360deg)}}@media(max-width:760px){.detail-hero-inner{grid-template-columns:1fr}.related-grid{grid-template-columns:1fr}.deprecated-banner{margin:16px;flex-direction:column}.install-card{padding:24px}}
 </style>

@@ -118,18 +118,18 @@ const searchInput = ref(null)
 const searchQuery = ref('')
 
 const stats = [
-  { value: '1,200+', label: '스킬' },
-  { value: '340+', label: '등록자' },
-  { value: '28,000+', label: '사용자' },
+  { value: '25', label: '스킬' },
+  { value: '2', label: '등록자' },
+  { value: '9,553', label: '사용자' },
 ]
 
 const featuredCourses = [
-  { id: 1, title: 'Spring Boot MSA 완성', category: '백엔드', instructor: '김등록자', price: '₩89,000' },
-  { id: 2, title: 'Vue 3 실전 프로젝트', category: '프론트엔드', instructor: '이등록자', price: '₩69,000' },
-  { id: 3, title: 'Kubernetes 운영 가이드', category: 'DevOps', instructor: '박등록자', price: '₩99,000' },
-  { id: 4, title: 'Docker 컨테이너 실전', category: 'DevOps', instructor: '정등록자', price: '₩79,000' },
-  { id: 5, title: 'Python 데이터 분석', category: '데이터', instructor: '최등록자', price: '₩59,000' },
-  { id: 6, title: 'Generative AI 실전', category: 'AI', instructor: '한등록자', price: '₩75,000' },
+  { id: 21, title: '장비 알람 타임라인 분석', category: '데이터', instructor: 'SKALA Semiconductor AX Team', price: '무료' },
+  { id: 18, title: 'SPC 이상 징후 분류', category: '데이터', instructor: 'SKALA Semiconductor AX Team', price: '무료' },
+  { id: 20, title: '장비 기동 전 동작 확인', category: '보안', instructor: 'SKALA Semiconductor AX Team', price: '무료' },
+  { id: 15, title: '공정 파라미터 승인 범위 점검', category: '보안', instructor: 'SKALA Semiconductor AX Team', price: '무료' },
+  { id: 11, title: 'RTL 시뮬레이션 디버깅 가이드', category: '백엔드', instructor: 'SKALA Semiconductor AX Team', price: '무료' },
+  { id: 5, title: 'SystemVerilog RTL 기본 리뷰', category: '백엔드', instructor: 'SKALA Semiconductor AX Team', price: '무료' },
 ]
 
 const features = [

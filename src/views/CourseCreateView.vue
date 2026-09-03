@@ -13,7 +13,7 @@
             class="sidebar-item"
             :class="{ active: $route.path === '/courses' }"
           >
-            <span class="si-icon">📚</span> 스킬 목록
+            <span>스킬 목록</span><span class="si-en">Skills</span>
           </router-link>
 
           <router-link
@@ -21,23 +21,19 @@
             class="sidebar-item"
             :class="{ active: $route.path === '/courses/new' }"
           >
-            <span class="si-icon">📦</span> 스킬 등록
+            <span>스킬 등록</span><span class="si-en">Register</span>
           </router-link>
 
           <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">⭐</span> 마이페이지
+            <span>마이페이지</span><span class="si-en">My Page</span>
           </router-link>
         </div>
 
         <div class="sidebar-section">
           <div class="sidebar-label">계정</div>
 
-          <router-link to="/mypage" class="sidebar-item">
-            <span class="si-icon">👤</span> 마이페이지
-          </router-link>
-
           <button class="sidebar-item sidebar-btn" @click="handleLogout">
-            <span class="si-icon">🚪</span> 로그아웃
+            <span>로그아웃</span><span class="si-en">Logout</span>
           </button>
         </div>
       </aside>
@@ -436,8 +432,13 @@ async function createCourse() {
   font-weight: 500;
 }
 
-.si-icon {
-  font-size: 15px;
+.si-en {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* =========================
