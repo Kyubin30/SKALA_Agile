@@ -33,8 +33,11 @@ const routes = [
   {
     path: '/courses/:id(\\d+)',
     name: 'CourseDetail',
-    component: () => import('@/views/CourseDetailView.vue'),
-    meta: { requiresAuth: true }
+    component: () => import('@/views/CourseDetailView.vue')
+  },
+  {
+    path: '/assets/:id(\\d+)',
+    redirect: to => ({ name: 'CourseDetail', params: { id: to.params.id } })
   },
   {
     path: '/enrollments',

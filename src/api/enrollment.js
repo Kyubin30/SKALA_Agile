@@ -1,8 +1,10 @@
 import api from './index.js'
 
 export const enrollmentApi = {
-  getMyEnrollments() {
-    return api.get('/api/enrollments/my')
+  getMyEnrollments(assetId) {
+    return api.get('/api/enrollments/my', {
+      params: assetId ? { assetId } : undefined
+    })
   },
   enroll(courseId) {
     return api.post('/api/enrollments', { courseId })

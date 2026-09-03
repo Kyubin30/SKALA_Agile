@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/courses/${course.id}`" class="course-card">
+  <router-link :to="{ name: 'CourseDetail', params: { id: course.id } }" class="course-card">
     <!-- 썸네일 -->
     <div class="card-thumb" :class="thumbBg">
       <img v-if="thumbSrc" :src="thumbSrc" :alt="course.title" class="thumb-img" />
@@ -11,11 +11,11 @@
       <span class="badge" :class="badgeClass">{{ course.category }}</span>
       <h3 class="card-title">{{ course.title }}</h3>
       <div class="card-meta">
-        <span class="instructor">{{ course.instructorName }}</span>
-        <span class="price">₩{{ Number(course.price).toLocaleString() }}</span>
+        <span class="instructor">{{ course.instructorName || course.authorName || '작성자 정보 없음' }}</span>
+        <span class="price" :class="{ restricted: grade === 'RESTRICTED' }">{{ gradeLabel }}</span>
       </div>
       <div class="card-footer">
-        <span class="enrolled">수강생 {{ course.enrollmentCount?.toLocaleString() }}명</span>
+        <span class="enrolled">선택 수 {{ Number(course.enrollmentCount || 0).toLocaleString() }}</span>
       </div>
     </div>
   </router-link>
@@ -39,6 +39,8 @@ const categoryConfig = {
 const config = computed(() => categoryConfig[props.course.category] || { bg: 'thumb-gray', badge: 'badge-gray' })
 const thumbBg = computed(() => config.value.bg)
 const badgeClass = computed(() => config.value.badge)
+const grade = computed(() => String(props.course.grade || 'PUBLIC').toUpperCase())
+const gradeLabel = computed(() => grade.value === 'RESTRICTED' ? '제한' : '공개')
 
 // 썸네일 이미지 동적 import
 const thumbSrc = computed(() => {
@@ -118,6 +120,9 @@ const thumbSrc = computed(() => {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-primary);
+}
+.price.restricted {
+  color: #b45309;
 }
 .card-footer {
   margin-top: 2px;
