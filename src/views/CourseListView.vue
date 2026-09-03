@@ -6,36 +6,36 @@
       <header class="page-heading">
         <div>
           <p class="path"><span>~</span>/courses</p>
-          <h1>강의 목록</h1>
-          <p v-if="isInstructor" class="page-description">
-            등록한 강의를 확인하고 새 강의를 추가할 수 있습니다.
+          <h1>자산 목록</h1>
+          <p v-if="isAuthor" class="page-description">
+            등록한 자산을 확인하고 새 자산을 추가할 수 있습니다.
           </p>
-          <p v-else class="page-description">원하는 분야의 강의를 빠르게 탐색하세요.</p>
+          <p v-else class="page-description">원하는 분야의 자산을 빠르게 탐색하세요.</p>
         </div>
-        <router-link v-if="isInstructor" to="/courses/new" class="create-link">
-          <span aria-hidden="true">+</span> 강의 등록
+        <router-link v-if="isAuthor" to="/courses/new" class="create-link">
+          <span aria-hidden="true">+</span> 자산 등록
         </router-link>
       </header>
 
       <section class="course-browser" aria-labelledby="browser-title">
-        <h2 id="browser-title" class="sr-only">강의 검색 및 필터</h2>
+        <h2 id="browser-title" class="sr-only">자산 검색 및 필터</h2>
 
         <form class="search-box" role="search" @submit.prevent="commitSearch">
-          <label class="sr-only" for="course-search">강의명 또는 강사명 검색</label>
+          <label class="sr-only" for="course-search">자산명 또는 작성자명 검색</label>
           <span class="prompt" aria-hidden="true">&gt;</span>
           <input
             id="course-search"
             ref="searchInput"
             v-model="searchQuery"
             type="search"
-            placeholder="강의명 또는 강사명 검색"
+            placeholder="자산명 또는 작성자명 검색"
             autocomplete="off"
           />
           <button v-if="searchQuery" type="button" class="clear-button" aria-label="검색어 지우기" @click="clearSearch">×</button>
           <kbd>/</kbd>
         </form>
 
-        <div class="tabs" role="tablist" aria-label="강의 카테고리">
+        <div class="tabs" role="tablist" aria-label="자산 카테고리">
           <button
             v-for="cat in categories"
             :key="cat"
@@ -51,15 +51,15 @@
 
         <div class="result-summary" aria-live="polite">
           <p>
-            <strong>{{ filteredCourses.length }}</strong>개의 강의
+            <strong>{{ filteredAssets.length }}</strong>개의 자산
             <template v-if="normalizedQuery"> · <span>&ldquo;{{ searchQuery.trim() }}&rdquo; 검색 결과</span></template>
           </p>
           <span class="sort-label">sort: relevance</span>
         </div>
 
-        <div v-if="loading" class="course-list" aria-label="강의 목록을 불러오는 중" aria-busy="true">
+        <div v-if="loading" class="course-list" aria-label="자산 목록을 불러오는 중" aria-busy="true">
           <div class="list-head" aria-hidden="true">
-            <span>강의</span><span>분야</span><span>강사</span><span>수강생</span><span>가격</span>
+            <span>자산</span><span>분야</span><span>유형</span><span>선택 수</span><span>등급</span>
           </div>
           <div v-for="i in 6" :key="i" class="skeleton-row">
             <span class="skeleton wide"></span><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton short"></span><span class="skeleton"></span>
@@ -67,43 +67,43 @@
         </div>
 
         <div v-else-if="error" class="empty-state" role="alert">
-          <span class="state-code">ERR_FETCH_COURSES</span>
-          <h2>강의 목록을 불러오지 못했습니다.</h2>
+          <span class="state-code">ERR_FETCH_ASSETS</span>
+          <h2>자산 목록을 불러오지 못했습니다.</h2>
           <p>{{ error }}</p>
-          <button type="button" class="retry-button" @click="courseStore.fetchCourses()">다시 시도</button>
+          <button type="button" class="retry-button" @click="assetStore.fetchAssets()">다시 시도</button>
         </div>
 
-        <div v-else-if="filteredCourses.length" class="course-list">
+        <div v-else-if="filteredAssets.length" class="course-list">
           <div class="list-head" aria-hidden="true">
-            <span>강의</span>
+            <span>자산</span>
             <span>분야</span>
-            <span>강사</span>
-            <span class="align-right">수강생</span>
-            <span class="align-right">가격</span>
+            <span>유형</span>
+            <span class="align-right">선택 수</span>
+            <span class="align-right">등급</span>
           </div>
           <router-link
-            v-for="(course, index) in filteredCourses"
-            :key="course.id"
-            :to="`/courses/${course.id}`"
+            v-for="(asset, index) in filteredAssets"
+            :key="asset.id"
+            :to="`/courses/${asset.id}`"
             class="course-row"
           >
             <span class="course-title">
               <span class="row-index">{{ String(index + 1).padStart(2, '0') }}</span>
-              <span>{{ course.title }}</span>
+              <span>{{ asset.title }}</span>
             </span>
-            <span class="category">{{ course.category || '-' }}</span>
-            <span class="instructor">{{ course.instructorName || '-' }}</span>
-            <span class="enrollment">{{ formatCount(course.enrollmentCount) }}</span>
-            <span class="price">{{ formatPrice(course.price) }}</span>
+            <span class="category">{{ asset.category || '-' }}</span>
+            <span class="instructor">{{ asset.assetTypeLabel || '-' }}</span>
+            <span class="enrollment">{{ formatCount(asset.enrollmentCount) }}</span>
+            <span class="price">{{ asset.gradeLabel || '-' }}</span>
           </router-link>
         </div>
 
         <div v-else class="empty-state">
           <span class="state-code">NO_MATCHES</span>
-          <h2>{{ hasActiveFilter ? '검색 결과가 없습니다.' : '등록된 강의가 없습니다.' }}</h2>
+          <h2>{{ hasActiveFilter ? '검색 결과가 없습니다.' : '등록된 자산이 없습니다.' }}</h2>
           <p v-if="hasActiveFilter">검색어나 카테고리를 바꿔 다시 확인해 보세요.</p>
           <button v-if="hasActiveFilter" type="button" class="retry-button" @click="resetFilters">필터 초기화</button>
-          <router-link v-else-if="isInstructor" to="/courses/new" class="retry-button">첫 강의 등록하기</router-link>
+          <router-link v-else-if="isAuthor" to="/courses/new" class="retry-button">첫 자산 등록하기</router-link>
         </div>
       </section>
     </main>
@@ -115,39 +115,39 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
-import { useCourseStore } from '@/store/course.js'
+import { useAssetStore } from '@/store/course.js'
 import { useAuthStore } from '@/store/auth.js'
 
 const route = useRoute()
 const router = useRouter()
-const courseStore = useCourseStore()
+const assetStore = useAssetStore()
 const auth = useAuthStore()
-const { courses, loading, error, selectedCategory } = storeToRefs(courseStore)
+const { assets, loading, error, selectedCategory } = storeToRefs(assetStore)
 
-const categories = courseStore.categories
+const categories = assetStore.categories
 const searchInput = ref(null)
 const searchQuery = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const normalizedQuery = computed(() => searchQuery.value.trim().toLocaleLowerCase())
-const isInstructor = computed(() => auth.user?.role === 'INSTRUCTOR')
+const isAuthor = computed(() => ['INSTRUCTOR', 'AUTHOR'].includes(auth.user?.role))
 
 const categoryCounts = computed(() => {
   const counts = Object.fromEntries(categories.map(category => [category, 0]))
-  counts['전체'] = courses.value.length
+  counts['전체'] = assets.value.length
 
-  courses.value.forEach((course) => {
-    if (Object.hasOwn(counts, course.category)) counts[course.category] += 1
+  assets.value.forEach((asset) => {
+    if (Object.hasOwn(counts, asset.category)) counts[asset.category] += 1
   })
 
   return counts
 })
 
-const filteredCourses = computed(() => {
-  return courses.value.filter((course) => {
-    const matchesCategory = selectedCategory.value === '전체' || course.category === selectedCategory.value
+const filteredAssets = computed(() => {
+  return assets.value.filter((asset) => {
+    const matchesCategory = selectedCategory.value === '전체' || asset.category === selectedCategory.value
     if (!matchesCategory) return false
     if (!normalizedQuery.value) return true
 
-    const searchableText = [course.title, course.instructorName, course.category]
+    const searchableText = [asset.title, asset.authorName, asset.category, asset.assetTypeLabel, asset.gradeLabel]
       .filter(Boolean)
       .join(' ')
       .toLocaleLowerCase()
@@ -159,7 +159,7 @@ const filteredCourses = computed(() => {
 const hasActiveFilter = computed(() => selectedCategory.value !== '전체' || Boolean(normalizedQuery.value))
 
 function selectCategory(category) {
-  courseStore.setCategory(category)
+  assetStore.setCategory(category)
 }
 
 function withoutSearchQuery() {
@@ -180,20 +180,14 @@ function clearSearch() {
 }
 
 function resetFilters() {
-  courseStore.setCategory('전체')
+  assetStore.setCategory('전체')
   clearSearch()
 }
 
 function formatCount(value) {
   if (value === null || value === undefined || value === '') return '-'
   const number = Number(value)
-  return Number.isFinite(number) ? `${number.toLocaleString()}명` : '-'
-}
-
-function formatPrice(value) {
-  if (value === null || value === undefined || value === '') return '-'
-  const number = Number(value)
-  return Number.isFinite(number) ? `₩${number.toLocaleString()}` : '-'
+  return Number.isFinite(number) ? number.toLocaleString() : '-'
 }
 
 function handleShortcut(event) {
@@ -216,7 +210,7 @@ watch(
 )
 
 onMounted(() => {
-  courseStore.fetchCourses()
+  assetStore.fetchAssets()
   window.addEventListener('keydown', handleShortcut)
 })
 
