@@ -5,22 +5,22 @@
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="shell hero-inner">
-          <p class="eyebrow"><span aria-hidden="true">$</span> learnnexus --discover</p>
-          <h1 id="hero-title">배움에 필요한 강의를<br />한곳에서 탐색하세요.</h1>
+          <p class="eyebrow"><span aria-hidden="true">$</span> skills --discover</p>
+          <h1 id="hero-title">필요한 스킬을<br />한곳에서 찾아보세요.</h1>
           <p class="hero-description">
-            개발, 디자인, 비즈니스 분야의 실무 강의를 찾고<br class="desktop-break" />
-            나에게 맞는 학습 경로를 시작해 보세요.
+            개발, 운영, 데이터 분야의 실무 스킬을 찾고<br class="desktop-break" />
+            나에게 맞는 성장 경로를 시작해 보세요.
           </p>
 
           <form class="course-search" role="search" @submit.prevent="submitSearch">
-            <label class="sr-only" for="landing-search">강의 검색</label>
+            <label class="sr-only" for="landing-search">스킬 검색</label>
             <span class="prompt" aria-hidden="true">&gt;</span>
             <input
               id="landing-search"
               ref="searchInput"
               v-model.trim="searchQuery"
               type="search"
-              placeholder="강의명 또는 강사명 검색"
+              placeholder="스킬명 또는 등록자명 검색"
               autocomplete="off"
             />
             <kbd>/</kbd>
@@ -29,10 +29,10 @@
 
           <div class="hero-links" aria-label="빠른 이동">
             <router-link to="/login">시작하기 <span aria-hidden="true">&#8599;</span></router-link>
-            <router-link to="/courses">전체 강의 보기 <span aria-hidden="true">&#8594;</span></router-link>
+            <router-link to="/courses">전체 스킬 보기 <span aria-hidden="true">&#8594;</span></router-link>
           </div>
 
-          <dl class="stats" aria-label="LearnNexus 현황">
+          <dl class="stats" aria-label="SKILLS 현황">
             <div v-for="stat in stats" :key="stat.label">
               <dt>{{ stat.label }}</dt>
               <dd>{{ stat.value }}</dd>
@@ -45,16 +45,16 @@
         <div class="section-heading">
           <div>
             <p class="section-kicker">/featured</p>
-            <h2 id="popular-title">인기 강의</h2>
+            <h2 id="popular-title">인기 스킬</h2>
           </div>
           <router-link to="/courses" class="text-link">전체 보기 <span aria-hidden="true">&#8594;</span></router-link>
         </div>
 
         <div class="course-list">
           <div class="course-list-head" aria-hidden="true">
-            <span>강의</span>
+            <span>스킬</span>
             <span>분야</span>
-            <span>강사</span>
+            <span>등록자</span>
             <span class="align-right">가격</span>
           </div>
           <router-link
@@ -75,8 +75,8 @@
         <div class="shell">
           <div class="section-heading">
             <div>
-              <p class="section-kicker">/why-learnnexus</p>
-              <h2>학습에만 집중할 수 있도록</h2>
+              <p class="section-kicker">/why-skills</p>
+              <h2>스킬에만 집중할 수 있도록</h2>
             </div>
           </div>
           <div class="principle-grid">
@@ -91,9 +91,9 @@
 
       <section class="bottom-cta shell" aria-labelledby="cta-title">
         <p class="section-kicker">/start</p>
-        <h2 id="cta-title">다음 강의를 찾을 준비가 되셨나요?</h2>
+        <h2 id="cta-title">다음 스킬을 찾을 준비가 되셨나요?</h2>
         <router-link to="/login" class="command-link">
-          <span aria-hidden="true">$</span> learnnexus start
+          <span aria-hidden="true">$</span> skills start
           <span class="command-arrow" aria-hidden="true">&#8594;</span>
         </router-link>
       </section>
@@ -101,8 +101,8 @@
 
     <footer class="footer">
       <div class="shell footer-inner">
-        <strong>LearnNexus</strong>
-        <span>&copy; 2026 LearnNexus</span>
+        <strong>SKILLS</strong>
+        <span>&copy; 2026 SKILLS</span>
       </div>
     </footer>
   </div>
@@ -118,25 +118,25 @@ const searchInput = ref(null)
 const searchQuery = ref('')
 
 const stats = [
-  { value: '1,200+', label: '강의' },
-  { value: '340+', label: '강사' },
-  { value: '28,000+', label: '수강생' },
+  { value: '1,200+', label: '스킬' },
+  { value: '340+', label: '등록자' },
+  { value: '28,000+', label: '사용자' },
 ]
 
 const featuredCourses = [
-  { id: 1, title: 'Spring Boot MSA 완성', category: '백엔드', instructor: '김강사', price: '₩89,000' },
-  { id: 2, title: 'Vue 3 실전 프로젝트', category: '프론트엔드', instructor: '이강사', price: '₩69,000' },
-  { id: 3, title: 'Kubernetes 운영 가이드', category: 'DevOps', instructor: '박강사', price: '₩99,000' },
-  { id: 4, title: 'Docker 컨테이너 실전', category: 'DevOps', instructor: '정강사', price: '₩79,000' },
-  { id: 5, title: 'Python 데이터 분석', category: '데이터', instructor: '최강사', price: '₩59,000' },
-  { id: 6, title: 'Generative AI 실전', category: 'AI', instructor: '한강사', price: '₩75,000' },
+  { id: 1, title: 'Spring Boot MSA 완성', category: '백엔드', instructor: '김등록자', price: '₩89,000' },
+  { id: 2, title: 'Vue 3 실전 프로젝트', category: '프론트엔드', instructor: '이등록자', price: '₩69,000' },
+  { id: 3, title: 'Kubernetes 운영 가이드', category: 'DevOps', instructor: '박등록자', price: '₩99,000' },
+  { id: 4, title: 'Docker 컨테이너 실전', category: 'DevOps', instructor: '정등록자', price: '₩79,000' },
+  { id: 5, title: 'Python 데이터 분석', category: '데이터', instructor: '최등록자', price: '₩59,000' },
+  { id: 6, title: 'Generative AI 실전', category: 'AI', instructor: '한등록자', price: '₩75,000' },
 ]
 
 const features = [
-  { title: '실무 중심 커리큘럼', desc: '현업 전문가가 설계한 실전 프로젝트로 배웁니다.' },
-  { title: '맞춤 강의 탐색', desc: '관심 분야와 학습 이력에 맞는 강의를 빠르게 찾습니다.' },
-  { title: '간편한 수강 신청', desc: '복잡한 절차 없이 신청하고 바로 학습을 시작합니다.' },
-  { title: '언제 어디서나', desc: '다양한 화면에 맞춰 필요한 강의를 이어서 수강합니다.' },
+  { title: '실무 중심 스킬', desc: '현업에서 검증된 방법만 정리해서 올립니다.' },
+  { title: '맞춤 스킬 탐색', desc: '관심 분야와 이력에 맞는 스킬을 빠르게 찾습니다.' },
+  { title: '간편한 사용 신청', desc: '복잡한 절차 없이 신청하고 바로 활용을 시작합니다.' },
+  { title: '언제 어디서나', desc: '다양한 화면에 맞춰 필요한 스킬을 이어서 활용합니다.' },
 ]
 
 function submitSearch() {

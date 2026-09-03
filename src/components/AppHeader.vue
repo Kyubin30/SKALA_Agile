@@ -3,14 +3,14 @@
     <div class="header-inner">
       <!-- 로고 -->
       <router-link to="/" class="logo">
-        <img src="@/assets/images/logo/main_logo.png" alt="LearnNexus" class="logo-img" />
-        <span class="logo-text">LearnNexus</span>
+        <img src="@/assets/images/logo/main_logo.png" alt="SKILLS" class="logo-img" />
+        <span class="logo-text">SKILLS</span>
       </router-link>
 
       <!-- 네비게이션 -->
       <nav class="nav-links" v-if="auth.isAuthenticated">
-        <router-link to="/courses" class="nav-link" :class="{ active: $route.path.startsWith('/courses') || $route.path.startsWith('/assets') }">자산</router-link>
-        <router-link to="/enrollments" class="nav-link" :class="{ active: $route.path === '/enrollments' }">내 사용 요청</router-link>
+        <router-link to="/courses" class="nav-link" :class="{ active: $route.path.startsWith('/courses') || $route.path.startsWith('/assets') }">스킬</router-link>
+        <router-link to="/enrollments" class="nav-link" :class="{ active: $route.path === '/enrollments' }">내 스킬</router-link>
       </nav>
 
       <!-- 우측 액션 -->
@@ -48,7 +48,7 @@ function handleLogout() {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255,255,255,0.92);
+  background: color-mix(in srgb, var(--color-bg-secondary) 92%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
 }
@@ -71,13 +71,14 @@ function handleLogout() {
   width: 36px;
   height: 36px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 4px;
+  filter: grayscale(1);
 }
 .logo-text {
   font-size: 17px;
   font-weight: 700;
   color: var(--color-text-primary);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
 }
 .nav-links {
   display: flex;
@@ -86,7 +87,7 @@ function handleLogout() {
 }
 .nav-link {
   padding: 6px 14px;
-  border-radius: var(--radius-md);
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-secondary);
@@ -123,6 +124,6 @@ function handleLogout() {
 }
 .user-avatar:hover {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-primary-ink);
 }
 </style>

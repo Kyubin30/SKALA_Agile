@@ -7,11 +7,11 @@
           <div class="sidebar-label">메뉴</div>
 
           <router-link to="/courses" class="sidebar-item">
-            <span class="si-icon">📚</span> 자산 목록
+            <span class="si-icon">📚</span> 스킬 목록
           </router-link>
 
           <router-link to="/enrollments" class="sidebar-item">
-            <span class="si-icon">✅</span> 내 사용 목록
+            <span class="si-icon">✅</span> 내 스킬
           </router-link>
 
           <router-link to="/mypage" class="sidebar-item active">
@@ -37,9 +37,9 @@
           </div>
         </div>
 
-        <!-- 추천 자산 -->
+        <!-- 추천 스킬 -->
         <section class="recommend-section">
-          <h3 class="section-title">추천 자산</h3>
+          <h3 class="section-title">추천 스킬</h3>
 
           <p v-if="recommendMessage" class="recommend-message">
             {{ recommendMessage }}
@@ -64,7 +64,7 @@
           </p>
 
           <p v-else class="empty-text">
-            아직 추천할 자산이 없습니다.
+            아직 추천할 스킬이 없습니다.
           </p>
         </section>
       </main>
@@ -97,13 +97,13 @@ async function loadRecommendations() {
   try {
     if (!auth.user) {
       console.warn('[MyPage] auth.user is missing')
-      recommendError.value = '추천 자산을 준비 중입니다.'
+      recommendError.value = '추천 스킬을 준비 중입니다.'
       return
     }
 
     if (!auth.user.id) {
       console.warn('[MyPage] auth.user.id is missing:', auth.user)
-      recommendError.value = '추천 자산을 준비 중입니다.'
+      recommendError.value = '추천 스킬을 준비 중입니다.'
       return
     }
 
@@ -128,7 +128,7 @@ async function loadRecommendations() {
     }
   } catch (error) {
     console.error('[MyPage] failed to load recommendations:', error)
-    recommendError.value = '현재 추천 자산을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
+    recommendError.value = '현재 추천 스킬을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
   } finally {
     recommendLoading.value = false
   }
@@ -140,15 +140,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
-
-/* 이 화면만 design.md(터미널/모노크롬) 톤을 색상 값으로 직접 지정한다. global.css는 안 건드림. */
-
 .page-wrapper {
   min-height: 100vh;
-  background: #000000;
-  color: #EDEDED;
-  font-family: 'Geist', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 }
 
 .page-layout {
@@ -178,7 +173,7 @@ onMounted(async () => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #7D7D7D;
+  color: var(--color-text-muted);
   padding: 8px 12px 4px;
 }
 
@@ -187,27 +182,27 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   padding: 9px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 14px;
-  color: #A1A1A1;
-  transition: all 0.2s ease;
+  color: var(--color-text-secondary);
+  transition: var(--transition);
   background: none;
   border: none;
   width: 100%;
   text-align: left;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-sans);
   text-decoration: none;
 }
 
 .sidebar-item:hover {
-  background: #161616;
-  color: #EDEDED;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
 }
 
 .sidebar-item.active {
-  background: rgba(255,255,255,0.10);
-  color: #FFFFFF;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   font-weight: 500;
 }
 
@@ -226,19 +221,19 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: #0A0A0A;
-  border: 1px solid #2E2E2E;
-  border-radius: 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 28px;
-  box-shadow: 0 1px 0 rgba(255,255,255,.06);
+  box-shadow: var(--shadow-sm);
 }
 
 .profile-avatar {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.10);
-  color: #FFFFFF;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   font-size: 24px;
   font-weight: 700;
   display: flex;
@@ -260,7 +255,7 @@ onMounted(async () => {
 
 .profile-email {
   font-size: 14px;
-  color: #A1A1A1;
+  color: var(--color-text-secondary);
 }
 
 .section-title {
@@ -271,7 +266,7 @@ onMounted(async () => {
 .recommend-message {
   margin-bottom: 14px;
   font-size: 13px;
-  color: #A1A1A1;
+  color: var(--color-text-secondary);
 }
 
 .recommend-grid {
@@ -287,10 +282,10 @@ onMounted(async () => {
 }
 
 .skeleton-card {
-  background: #0A0A0A;
-  border-radius: 12px;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid #2E2E2E;
+  border: 1px solid var(--color-border);
 }
 
 .skeleton-thumb {
@@ -320,7 +315,7 @@ onMounted(async () => {
 }
 
 .empty-text {
-  color: #7D7D7D;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 

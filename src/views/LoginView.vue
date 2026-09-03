@@ -4,12 +4,12 @@
       <!-- 좌측 브랜딩 -->
       <div class="login-left">
         <div class="brand">
-          <img src="@/assets/images/logo/main_logo.png" alt="LearnNexus" class="brand-logo" />
-          <span class="brand-name">LearnNexus</span>
+          <img src="@/assets/images/logo/main_logo.png" alt="SKILLS" class="brand-logo" />
+          <span class="brand-name">SKILLS</span>
         </div>
         <div class="brand-content">
           <h2>다시 만나서<br>반갑습니다</h2>
-          <p>로그인하고 나만의 학습 여정을 이어가세요.</p>
+          <p>로그인하고 나만의 스킬 여정을 이어가세요.</p>
           <ul class="feature-list">
             <li v-for="f in features" :key="f">
               <span class="dot"></span>{{ f }}
@@ -26,7 +26,7 @@
           <!-- 로그인 영역 -->
           <div v-if="!showRegister" class="section">
             <h3 class="section-title">로그인</h3>
-            <p class="section-desc">LearnNexus 계정으로 로그인합니다.</p>
+            <p class="section-desc">SKILLS 계정으로 로그인합니다. 버튼을 누르면 인증 서버로 이동합니다.</p>
             <button class="btn btn-primary btn-full" @click="handleOAuth">로그인</button>
             <div class="switch-link">
               계정이 없으신가요?
@@ -54,7 +54,7 @@
                 <label class="form-label">역할</label>
                 <select v-model="registerForm.role" class="form-input">
                   <option value="STUDENT">학생</option>
-                  <option value="INSTRUCTOR">강사</option>
+                  <option value="INSTRUCTOR">등록자</option>
                 </select>
               </div>
               <div v-if="error" class="error-msg">{{ error }}</div>
@@ -90,7 +90,7 @@ const success = ref('')
 
 const registerForm = ref({ name: '', email: '', password: '', role: 'STUDENT' })
 
-const features = ['수강 중인 강의 이어보기', '맞춤 강의 추천', '수료증 관리']
+const features = ['가져온 스킬 이어보기', '맞춤 스킬 추천', '수료증 관리']
 
 function handleOAuth() {
   auth.redirectToLogin()
@@ -129,23 +129,24 @@ async function handleRegister() {
   min-height: 100vh;
 }
 .login-left {
-  background: linear-gradient(160deg, #1a4f8a 0%, #185FA5 50%, #1e7bc4 100%);
+  background: var(--color-bg-tertiary);
+  border-right: 1px solid var(--color-border);
   padding: 48px;
   display: flex;
   flex-direction: column;
   gap: 48px;
 }
 .brand { display: flex; align-items: center; gap: 10px; }
-.brand-logo { width: 40px; height: 40px; border-radius: 10px; object-fit: contain; }
-.brand-name { font-size: 18px; font-weight: 700; color: #fff; }
+.brand-logo { width: 40px; height: 40px; border-radius: var(--radius-md); object-fit: contain; filter: grayscale(1); }
+.brand-name { font-size: 18px; font-weight: 700; color: var(--color-text-primary); }
 .brand-content h2 {
-  font-size: 32px; font-weight: 700; color: #fff;
+  font-size: 32px; font-weight: 700; color: var(--color-text-primary);
   line-height: 1.35; margin-bottom: 14px;
 }
-.brand-content p { font-size: 15px; color: rgba(255,255,255,0.75); margin-bottom: 28px; }
+.brand-content p { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 28px; }
 .feature-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.85); }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.6); flex-shrink: 0; }
+.feature-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--color-text-secondary); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-text-muted); flex-shrink: 0; }
 
 .login-right {
   display: flex;
@@ -203,18 +204,18 @@ async function handleRegister() {
 }
 .error-msg {
   padding: 10px 14px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
   border-radius: var(--radius-md);
   font-size: 13px;
-  color: #dc2626;
+  color: var(--color-danger);
 }
 .success-msg {
   padding: 10px 14px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: var(--color-success-light);
+  border: 1px solid var(--color-success);
   border-radius: var(--radius-md);
   font-size: 13px;
-  color: #16a34a;
+  color: var(--color-success);
 }
 </style>

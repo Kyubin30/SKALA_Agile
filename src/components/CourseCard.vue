@@ -11,11 +11,11 @@
       <span class="badge" :class="badgeClass">{{ course.category }}</span>
       <h3 class="card-title">{{ course.title }}</h3>
       <div class="card-meta">
-        <span class="instructor">{{ course.instructorName || course.authorName || '작성자 정보 없음' }}</span>
+        <span class="instructor">{{ course.instructorName || course.authorName || '등록자 정보 없음' }}</span>
         <span class="price" :class="{ restricted: grade === 'RESTRICTED' }">{{ gradeLabel }}</span>
       </div>
       <div class="card-footer">
-        <span class="enrolled">선택 수 {{ Number(course.enrollmentCount || 0).toLocaleString() }}</span>
+        <span class="enrolled">사용자 {{ Number(course.enrollmentCount || 0).toLocaleString() }}명</span>
       </div>
     </div>
   </router-link>

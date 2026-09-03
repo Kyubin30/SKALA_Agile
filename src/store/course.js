@@ -149,7 +149,7 @@ export const useAssetStore = defineStore('asset', () => {
       assets.value = rawAssets.map(normalizeAsset)
     } catch (e) {
       console.error('[AssetStore] fetchAssets failed:', e)
-      error.value = e.message || '자산 목록을 불러오지 못했습니다.'
+      error.value = e.message || '스킬 목록을 불러오지 못했습니다.'
       assets.value = []
     } finally {
       loading.value = false
@@ -171,7 +171,7 @@ export const useAssetStore = defineStore('asset', () => {
       selectedAsset.value = normalizeAsset(rawAsset)
     } catch (e) {
       console.error('[AssetStore] fetchAsset failed:', e)
-      error.value = e.message || '자산 정보를 불러오지 못했습니다.'
+      error.value = e.message || '스킬 정보를 불러오지 못했습니다.'
       selectedAsset.value = null
     } finally {
       loading.value = false

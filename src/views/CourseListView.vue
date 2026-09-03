@@ -6,36 +6,36 @@
       <header class="page-heading">
         <div>
           <p class="path"><span>~</span>/courses</p>
-          <h1>자산 목록</h1>
+          <h1>스킬 목록</h1>
           <p v-if="isAuthor" class="page-description">
-            등록한 자산을 확인하고 새 자산을 추가할 수 있습니다.
+            등록한 스킬을 확인하고 새 스킬을 추가할 수 있습니다.
           </p>
-          <p v-else class="page-description">원하는 분야의 자산을 빠르게 탐색하세요.</p>
+          <p v-else class="page-description">원하는 분야의 스킬을 빠르게 탐색하세요.</p>
         </div>
         <router-link v-if="isAuthor" to="/courses/new" class="create-link">
-          <span aria-hidden="true">+</span> 자산 등록
+          <span aria-hidden="true">+</span> 스킬 등록
         </router-link>
       </header>
 
       <section class="course-browser" aria-labelledby="browser-title">
-        <h2 id="browser-title" class="sr-only">자산 검색 및 필터</h2>
+        <h2 id="browser-title" class="sr-only">스킬 검색 및 필터</h2>
 
         <form class="search-box" role="search" @submit.prevent="commitSearch">
-          <label class="sr-only" for="course-search">자산명 또는 작성자명 검색</label>
+          <label class="sr-only" for="course-search">스킬명 또는 등록자명 검색</label>
           <span class="prompt" aria-hidden="true">&gt;</span>
           <input
             id="course-search"
             ref="searchInput"
             v-model="searchQuery"
             type="search"
-            placeholder="자산명 또는 작성자명 검색"
+            placeholder="스킬명 또는 등록자명 검색"
             autocomplete="off"
           />
           <button v-if="searchQuery" type="button" class="clear-button" aria-label="검색어 지우기" @click="clearSearch">×</button>
           <kbd>/</kbd>
         </form>
 
-        <div class="tabs" role="tablist" aria-label="자산 카테고리">
+        <div class="tabs" role="tablist" aria-label="스킬 카테고리">
           <button
             v-for="cat in categories"
             :key="cat"
@@ -51,15 +51,15 @@
 
         <div class="result-summary" aria-live="polite">
           <p>
-            <strong>{{ filteredAssets.length }}</strong>개의 자산
+            <strong>{{ filteredAssets.length }}</strong>개의 스킬
             <template v-if="normalizedQuery"> · <span>&ldquo;{{ searchQuery.trim() }}&rdquo; 검색 결과</span></template>
           </p>
           <span class="sort-label">sort: relevance</span>
         </div>
 
-        <div v-if="loading" class="course-list" aria-label="자산 목록을 불러오는 중" aria-busy="true">
+        <div v-if="loading" class="course-list" aria-label="스킬 목록을 불러오는 중" aria-busy="true">
           <div class="list-head" aria-hidden="true">
-            <span>자산</span><span>분야</span><span>유형</span><span>선택 수</span><span>등급</span>
+            <span>스킬</span><span>분야</span><span>유형</span><span>선택 수</span><span>등급</span>
           </div>
           <div v-for="i in 6" :key="i" class="skeleton-row">
             <span class="skeleton wide"></span><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton short"></span><span class="skeleton"></span>
@@ -68,14 +68,14 @@
 
         <div v-else-if="error" class="empty-state" role="alert">
           <span class="state-code">ERR_FETCH_ASSETS</span>
-          <h2>자산 목록을 불러오지 못했습니다.</h2>
+          <h2>스킬 목록을 불러오지 못했습니다.</h2>
           <p>{{ error }}</p>
           <button type="button" class="retry-button" @click="assetStore.fetchAssets()">다시 시도</button>
         </div>
 
         <div v-else-if="filteredAssets.length" class="course-list">
           <div class="list-head" aria-hidden="true">
-            <span>자산</span>
+            <span>스킬</span>
             <span>분야</span>
             <span>유형</span>
             <span class="align-right">선택 수</span>
@@ -100,10 +100,10 @@
 
         <div v-else class="empty-state">
           <span class="state-code">NO_MATCHES</span>
-          <h2>{{ hasActiveFilter ? '검색 결과가 없습니다.' : '등록된 자산이 없습니다.' }}</h2>
+          <h2>{{ hasActiveFilter ? '검색 결과가 없습니다.' : '등록된 스킬이 없습니다.' }}</h2>
           <p v-if="hasActiveFilter">검색어나 카테고리를 바꿔 다시 확인해 보세요.</p>
           <button v-if="hasActiveFilter" type="button" class="retry-button" @click="resetFilters">필터 초기화</button>
-          <router-link v-else-if="isAuthor" to="/courses/new" class="retry-button">첫 자산 등록하기</router-link>
+          <router-link v-else-if="isAuthor" to="/courses/new" class="retry-button">첫 스킬 등록하기</router-link>
         </div>
       </section>
     </main>

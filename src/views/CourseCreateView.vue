@@ -13,7 +13,7 @@
             class="sidebar-item"
             :class="{ active: $route.path === '/courses' }"
           >
-            <span class="si-icon">📚</span> 강의 목록
+            <span class="si-icon">📚</span> 스킬 목록
           </router-link>
 
           <router-link
@@ -21,7 +21,7 @@
             class="sidebar-item"
             :class="{ active: $route.path === '/courses/new' }"
           >
-            <span class="si-icon">📦</span> 자산 등록
+            <span class="si-icon">📦</span> 스킬 등록
           </router-link>
 
           <router-link to="/mypage" class="sidebar-item">
@@ -46,17 +46,17 @@
       <main class="main-content">
         <div class="content-header">
           <div>
-            <h1 class="page-title">자산 등록</h1>
+            <h1 class="page-title">스킬 등록</h1>
             <p class="page-subtitle">
-              등록할 자산의 정보를 입력해 주세요.
+              등록할 스킬의 정보를 입력해 주세요.
             </p>
           </div>
         </div>
 
         <div class="form-card">
           <div class="step-header">
-            <h2>자산 정보 작성</h2>
-            <p>등록할 자산의 기본 정보를 입력해 주세요.</p>
+            <h2>스킬 정보 작성</h2>
+            <p>등록할 스킬의 기본 정보를 입력해 주세요.</p>
           </div>
 
           <div class="asset-form">
@@ -87,15 +87,15 @@
                 v-model.trim="form.description"
                 class="form-textarea"
                 rows="8"
-                placeholder="자산의 내용, 사용 방법, 설명 등을 입력해 주세요."
+                placeholder="스킬의 내용, 사용 방법, 설명 등을 입력해 주세요."
               ></textarea>
             </div>
 
-            <!-- 자산 유형 / 등급 -->
+            <!-- 스킬 유형 / 등급 -->
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="assetType">
-                  자산 유형 <span class="required">*</span>
+                  스킬 유형 <span class="required">*</span>
                 </label>
 
                 <select
@@ -104,7 +104,7 @@
                   class="form-select"
                 >
                   <option disabled value="">
-                    자산 유형을 선택하세요
+                    스킬 유형을 선택하세요
                   </option>
 
                   <option
@@ -157,7 +157,7 @@
               />
 
               <p class="form-help">
-                자산을 사용하기 위해 필요한 설치 명령이 있다면 입력해 주세요.
+                스킬을 사용하기 위해 필요한 설치 명령이 있다면 입력해 주세요.
               </p>
             </div>
 
@@ -209,7 +209,7 @@
               @click="createCourse"
             >
               <span v-if="submitting">등록 중...</span>
-              <span v-else>자산 등록</span>
+              <span v-else>스킬 등록</span>
             </button>
           </div>
         </div>
@@ -293,7 +293,7 @@ function validateForm() {
   validationError.value = "";
 
   if (!auth.user || auth.user.role !== "INSTRUCTOR") {
-    validationError.value = "자산 등록 권한이 없습니다.";
+    validationError.value = "스킬 등록 권한이 없습니다.";
     return false;
   }
 
@@ -308,7 +308,7 @@ function validateForm() {
   }
 
   if (!form.assetType) {
-    validationError.value = "자산 유형을 선택해 주세요.";
+    validationError.value = "스킬 유형을 선택해 주세요.";
     return false;
   }
 
@@ -326,7 +326,7 @@ function validateForm() {
 }
 
 /* =========================
-   자산 등록
+   스킬 등록
 ========================= */
 
 async function createCourse() {
@@ -351,12 +351,12 @@ async function createCourse() {
     const createdId = res.data?.data?.id ?? res.data?.id;
 
     if (!createdId) {
-      throw new Error("생성된 자산 ID를 받지 못했습니다.");
+      throw new Error("생성된 스킬 ID를 받지 못했습니다.");
     }
 
     courseId.value = createdId;
 
-    // 등록된 자산 상세 페이지로 이동
+    // 등록된 스킬 상세 페이지로 이동
     router.push(`/courses/${courseId.value}`);
   } catch (error) {
     console.error("[AssetCreate] create failed:", error);
@@ -364,7 +364,7 @@ async function createCourse() {
     submitError.value =
       error.response?.data?.message ||
       error.message ||
-      "자산 등록에 실패했습니다.";
+      "스킬 등록에 실패했습니다.";
   } finally {
     submitting.value = false;
   }
