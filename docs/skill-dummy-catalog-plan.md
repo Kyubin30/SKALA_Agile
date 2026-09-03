@@ -8,7 +8,7 @@
 - 데모의 핵심 메시지: **설계, 검증, EDA, 공정, 장비, 품질, AX가 하나의 제품 라이프사이클로 연결된다.**
 - 사용자 역할의 범위: 스킬의 실제 실행 엔진이 아니라, 화면과 변환 테스트에 사용할 스킬 정보·가상 입력·가상 출력·제약 조건을 만든다.
 
-구조화된 원본은 [`src/data/skills.seed.json`](../src/data/skills.seed.json), 검증 규격은 [`src/data/skills.schema.json`](../src/data/skills.schema.json)에 둔다.
+구조화된 작성 원본은 [`src/data/skills.seed.json`](../src/data/skills.seed.json), 검증 규격은 [`src/data/skills.schema.json`](../src/data/skills.schema.json)에 둔다. 기존 백엔드에는 생성된 [`src/data/courses.api.seed.json`](../src/data/courses.api.seed.json) 또는 [`src/data/courses.sql.seed.sql`](../src/data/courses.sql.seed.sql)을 사용한다. DB 스키마와 Course API는 변경하지 않는다.
 
 ## 2. 공통 데모 시나리오
 
@@ -128,16 +128,49 @@ flowchart LR
 - `PASS`, `READY`, `APPROVED`는 입력에 증거가 있을 때만 사용한다.
 - 시각화 스킬은 그림·CAD·3D 모델이 아니라 제작 명세와 Mermaid 초안을 반환한다.
 - 실제 생산·품질·안전 결정에는 담당 엔지니어 승인이 필요하다.
+- `compatibleTargets`는 데모에서 보여줄 변환 대상 후보이며 실제 provider 실행 검증 완료를 의미하지 않는다.
 
-## 7. 구현 순서
+## 7. 기존 백엔드 호환 방식
+
+Course 등록 API는 `title`, `description`, `category`, `price`만 받는다. 스킬 전용 컬럼을 추가하지 않고 다음과 같이 매핑한다.
+
+| 스킬 데이터 | 기존 백엔드 필드 |
+|---|---|
+| `name` | `courses.title` |
+| 전체 스킬 메타데이터와 데모 입출력 | `courses.description`의 `SKILL_DESCRIPTION_V1` JSON 문자열 |
+| `category` | `courses.category` 기존 enum |
+| 고정값 `0` | `courses.price` |
+| `usageCount` | SQL seed의 `courses.enrollment_count` |
+| 작성자 데모 계정 `4` | SQL seed의 `courses.instructor_id` |
+
+`courses.api.seed.json`의 각 원소는 `POST /api/courses`에 그대로 보낼 수 있다. SQL 초기화가 필요하면 같은 데이터가 담긴 `courses.sql.seed.sql`을 기존 `init-db`에 추가한다.
+
+`description`은 백엔드에서 일반 문자열로 저장·반환한다. 프런트에서는 다음 방식으로 해석하고, JSON 파싱에 실패하면 기존 일반 강의 설명으로 처리한다.
+
+```js
+let metadata = null
+try {
+  const parsed = JSON.parse(course.description)
+  if (parsed.format === 'SKILL_DESCRIPTION_V1') metadata = parsed
+} catch {
+  // 기존 일반 강의 설명은 그대로 표시
+}
+```
+
+원본을 수정한 뒤 아래 명령으로 두 호환 seed를 다시 만든다.
+
+```bash
+npm run seed:build
+npm run seed:check
+```
+
+## 8. 구현 순서
 
 사용자에게 할당된 더미 데이터 작업은 아래 범위까지 완료하면 독립 산출물로 인정할 수 있다.
 
-1. 공통 레코드 스키마 확정
-2. 24종 스킬 정보와 데모 입출력 작성
-3. slug·ID·연결 스킬·위험도 검증
-4. 프런트 카드용 필드 매핑
-5. 필요 시 기존 `courses` DB seed 형태로 변환
+1. `skills.seed.json`에 24종 스킬 정보와 데모 입출력 작성
+2. slug·ID·연결 스킬·필수 데모 입력 검증
+3. `seed:build`로 기존 Course API와 `courses` 테이블 형식 생성
+4. 프런트에서 `description`의 `SKILL_DESCRIPTION_V1`을 파싱해 스닉픽 표시
 
 실제 provider별 스킬 변환, EDA 실행, 장비 연결, 이미지 렌더링은 이 더미 데이터 작업의 범위 밖이다.
-

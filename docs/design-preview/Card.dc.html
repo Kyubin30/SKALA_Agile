@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Noto+Sans+KR:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: Geist, 'Noto Sans KR', 'Apple SD Gothic Neo', system-ui, sans-serif; color: #171717; background: #ffffff; font-size: 13px; line-height: 1.5; }
+    a { color: #171717; text-decoration: none; } a:hover { color: #0070f3; }
+    .mono { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; }
+    .muted { color: #666666; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 1px 7px; border: 1px solid #eaeaea; border-radius: 4px; font-size: 11px; }
+    .badge.fill { background: #171717; color: #ffffff; border-color: #171717; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .h3 { font-size: 10.5px; font-weight: 500; color: #666666; text-transform: uppercase; letter-spacing: 0.06em; }
+    .snip { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; background: #fafafa; border: 1px solid #eaeaea; border-radius: 4px; padding: 6px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  </style>
+</helmet>
+<div style="width: 420px; min-height: 300px; background: #ffffff; padding: 20px; box-sizing: border-box;">
+  <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="muted" style="font-size: 11px; display: flex; gap: 6px;"><span>FABLESS</span><span>/</span><span>DESIGN</span></div>
+      <span class="muted mono" style="font-size: 11px;">487 uses</span>
+    </div>
+    <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em;">SystemVerilog RTL 기본 리뷰</div>
+    <div class="muted">합성 가능한 RTL에서 기본 코딩 위험과 수정 후보를 줄 단위로 검토합니다.</div>
+    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+      <span class="badge fill">DIAGNOSTIC</span>
+      <span class="badge"><span class="dot" style="background: #f5a623;"></span>MEDIUM</span>
+      <span class="badge mono">v1.0.0-draft</span>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr; gap: 6px; padding-top: 4px;">
+      <div class="h3">in</div>
+      <div class="snip">rtlCode: "always_ff @(posedge clk) begin if (en) q = d; end"</div>
+      <div class="h3">out</div>
+      <div class="snip">HIGH · line 2 · sequential-nonblocking-assignment</div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eaeaea; padding-top: 10px; margin-top: 2px;">
+      <div style="display: flex; gap: 4px;" class="muted mono" title="targets">
+        <span class="badge">openai</span><span class="badge">anthropic</span><span class="badge">gemini</span><span class="badge">ollama</span>
+      </div>
+      <span class="muted" style="font-size: 12px;">자세히 →</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

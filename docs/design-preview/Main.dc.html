@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Noto+Sans+KR:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: Geist, 'Noto Sans KR', 'Apple SD Gothic Neo', system-ui, sans-serif; color: #171717; background: #ffffff; font-size: 14px; line-height: 1.5; }
+    a { color: #171717; text-decoration: none; } a:hover { color: #0070f3; }
+    .mono { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; }
+    .muted { color: #666666; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px solid #eaeaea; border-radius: 4px; font-size: 12px; color: #171717; background: #ffffff; }
+    .badge.fill { background: #171717; color: #ffffff; border-color: #171717; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .section { display: flex; flex-direction: column; gap: 14px; padding: 40px 0; border-top: 1px solid #eaeaea; }
+    .h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+    .h3 { font-size: 12px; font-weight: 500; color: #666666; text-transform: uppercase; letter-spacing: 0.06em; }
+    .code { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.6; background: #fafafa; border: 1px solid #eaeaea; border-radius: 6px; padding: 14px 16px; white-space: pre; overflow-x: auto; color: #171717; }
+    .chip { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 12px; padding: 3px 8px; border: 1px solid #eaeaea; border-radius: 4px; background: #fafafa; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; }
+    th { text-align: left; font-weight: 500; color: #666666; font-size: 12px; padding: 8px 12px; border-bottom: 1px solid #eaeaea; }
+    td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+    tr:hover td { background: #fafafa; }
+    .kbd { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; padding: 1px 6px; border: 1px solid #eaeaea; border-radius: 4px; color: #666666; }
+    .num { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  </style>
+</helmet>
+<div style="width: 1200px; min-height: 1900px; background: #ffffff; box-sizing: border-box; padding: 0 0 48px 0;">
+
+  <!-- top nav -->
+  <div style="display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 40px; border-bottom: 1px solid #eaeaea;">
+    <div style="display: flex; align-items: center; gap: 24px;">
+      <div style="font-weight: 600; letter-spacing: -0.02em;">SKALA Skills</div>
+      <div class="muted" style="display: flex; gap: 16px; font-size: 13px;"><span style="color: #171717;">카탈로그</span><span>내 스킬</span><span>등록</span></div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #eaeaea; border-radius: 6px; padding: 6px 10px; width: 260px; color: #666666; font-size: 13px;">검색 <span style="margin-left: auto;" class="kbd">⌘K</span></div>
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: #f0f0f0; border: 1px solid #eaeaea;"></div>
+    </div>
+  </div>
+
+  <div style="max-width: 1040px; margin: 0 auto; padding: 0 40px;">
+
+    <!-- breadcrumb -->
+    <div class="muted" style="display: flex; gap: 8px; font-size: 12px; padding: 24px 0 16px;">
+      <span>카탈로그</span><span>/</span><span>FABLESS</span><span>/</span><span>DESIGN</span><span>/</span><span class="mono" style="color: #171717;">fabless-systemverilog-rtl-review</span>
+    </div>
+
+    <!-- header + CTA -->
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; padding-bottom: 40px;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span class="badge fill">DIAGNOSTIC</span>
+          <span class="badge"><span class="dot" style="background: #f5a623;"></span>MEDIUM risk</span>
+          <span class="badge mono">v1.0.0-draft</span>
+          <span class="badge"><span class="dot" style="background: #999999;"></span>DRAFT</span>
+        </div>
+        <h1 style="margin: 0; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2;">SystemVerilog RTL 기본 리뷰</h1>
+        <p style="margin: 0; font-size: 15px; color: #444444; max-width: 560px;">합성 가능한 RTL에서 기본 코딩 위험과 수정 후보를 줄 단위로 검토합니다.</p>
+        <div class="muted" style="display: flex; gap: 20px; font-size: 13px; padding-top: 4px;">
+          <span>SKALA Semiconductor AX Team</span>
+          <span><span class="num" style="color: #171717;">487</span> 사용</span>
+          <span><span class="num" style="color: #171717;">3</span> 연결 스킬</span>
+          <span>업데이트 2026-09-03</span>
+        </div>
+        <!-- anchor tabs -->
+        <div style="display: flex; gap: 20px; font-size: 13px; border-bottom: 1px solid #eaeaea; margin-top: 12px;">
+          <span style="padding: 8px 0; border-bottom: 2px solid #171717; font-weight: 500;">개요</span>
+          <span class="muted" style="padding: 8px 0;">구조</span>
+          <span class="muted" style="padding: 8px 0;">스닉픽</span>
+          <span class="muted" style="padding: 8px 0;">호환성 <span class="num">(4)</span></span>
+          <span class="muted" style="padding: 8px 0;">검증·경계</span>
+          <span class="muted" style="padding: 8px 0;">연결 스킬 <span class="num">(3)</span></span>
+        </div>
+      </div>
+
+      <!-- CTA panel -->
+      <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; gap: 14px; background: #ffffff;">
+        <div class="h3">받아갈 대상 선택</div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+          <div style="border: 1px solid #eaeaea; border-radius: 6px; padding: 8px 10px; font-size: 13px; display: flex; justify-content: space-between;"><span>OpenAI</span><span class="muted mono" style="font-size: 11px;">bundle</span></div>
+          <div style="border: 1px solid #eaeaea; border-radius: 6px; padding: 8px 10px; font-size: 13px; display: flex; justify-content: space-between;"><span>Anthropic</span><span class="muted mono" style="font-size: 11px;">bundle</span></div>
+          <div style="border: 1px solid #eaeaea; border-radius: 6px; padding: 8px 10px; font-size: 13px; display: flex; justify-content: space-between;"><span>Gemini</span><span class="muted mono" style="font-size: 11px;">fn/prompt</span></div>
+          <div style="border: 1.5px solid #171717; border-radius: 6px; padding: 8px 10px; font-size: 13px; display: flex; justify-content: space-between; background: #fafafa;"><span style="font-weight: 500;">Ollama</span><span class="muted mono" style="font-size: 11px;">tool/prompt</span></div>
+        </div>
+        <div class="code" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px;"><span><span class="muted">$</span> skill add fabless-systemverilog-rtl-review --target ollama</span><span class="kbd">copy</span></div>
+        <div style="background: #171717; color: #ffffff; border-radius: 6px; padding: 11px; text-align: center; font-size: 14px; font-weight: 500;">내 스킬에 추가</div>
+        <div class="muted" style="font-size: 12px; line-height: 1.5;">요청 즉시 처리 단계로 넘어가며, 완료되면 내 스킬 목록에서 변환 결과를 내려받을 수 있습니다. 선택한 대상과 버전 <span class="mono">1.0.0-draft</span>가 함께 고정됩니다.</div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666666; border-top: 1px solid #eaeaea; padding-top: 12px;"><span class="dot" style="background: #999999;"></span>변환 후보 · 실행 검증 전 (NOT_VALIDATED)</div>
+      </div>
+    </div>
+
+    <!-- 개요 -->
+    <div class="section">
+      <div class="h2">개요</div>
+      <div style="display: grid; grid-template-columns: 160px minmax(0, 1fr); row-gap: 12px; column-gap: 24px; font-size: 14px;">
+        <div class="h3" style="padding-top: 2px;">언제 쓰나</div><div>RTL 작성 또는 변경 직후 정식 lint·simulation 전에 빠른 정적 리뷰가 필요할 때</div>
+        <div class="h3" style="padding-top: 2px;">도메인 · 단계</div><div style="display: flex; gap: 8px;"><span class="badge">FABLESS</span><span class="badge">DESIGN</span><span class="badge">BACKEND</span></div>
+        <div class="h3" style="padding-top: 2px;">지침</div>
+        <ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+          <li>각 지적에 코드 줄과 적용 규칙을 붙인다.</li>
+          <li>확인하지 못한 합성·타이밍 통과를 주장하지 않는다.</li>
+          <li>기능 요구사항이 없으면 기능 의도를 단정하지 않는다.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 구조 -->
+    <div class="section">
+      <div class="h2">스킬 구조</div>
+      <div class="muted" style="font-size: 13px; margin-top: -8px;">입력 필드 → 스킬 → 출력 필드. 필드명은 스닉픽 표시용이며, 실행 계약은 버전별 JSON Schema로 관리합니다.</div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); gap: 16px; align-items: start;">
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 10px 14px; border-bottom: 1px solid #eaeaea; background: #fafafa; display: flex; justify-content: space-between;"><span class="h3">required inputs</span><span class="muted num" style="font-size: 12px;">3</span></div>
+          <table>
+            <tr><td class="mono">language</td><td class="muted">string</td><td class="muted" style="text-align: right;">필수</td></tr>
+            <tr><td class="mono">rtlCode</td><td class="muted">string · 다중행</td><td class="muted" style="text-align: right;">필수</td></tr>
+            <tr><td class="mono">clockResetConvention</td><td class="muted">string</td><td class="muted" style="text-align: right;">필수</td></tr>
+          </table>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%; min-height: 150px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="1.5"><path d="M4 12h14"></path><path d="M13 7l5 5-5 5"></path></svg>
+        </div>
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 10px 14px; border-bottom: 1px solid #eaeaea; background: #fafafa; display: flex; justify-content: space-between;"><span class="h3">output fields · issues[]</span><span class="muted num" style="font-size: 12px;">5</span></div>
+          <table>
+            <tr><td class="mono">severity</td><td class="muted">HIGH | MEDIUM | LOW</td></tr>
+            <tr><td class="mono">line</td><td class="muted">integer</td></tr>
+            <tr><td class="mono">rule</td><td class="muted">string · 규칙 ID</td></tr>
+            <tr><td class="mono">explanation</td><td class="muted">string</td></tr>
+            <tr><td class="mono">suggestedFix</td><td class="muted">string</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 스닉픽 -->
+    <div class="section">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div class="h2">스닉픽 · 예시 입출력</div>
+        <div style="display: flex; gap: 8px;"><span class="badge fill">HAPPY_PATH</span><span class="badge muted">EDGE_CASE</span><span class="badge muted">FAILURE</span></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="h3">demo input</div>
+          <div class="code">{
+  "language": "SystemVerilog",
+  "clockResetConvention":
+    "posedge clock, nonblocking sequential assignment",
+  "rtlCode": "always_ff @(posedge clk) begin
+                if (en) q = d;
+              end"
+}</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="h3">demo output</div>
+          <div class="code">{
+  "issues": [
+    {
+      "severity": "HIGH",
+      "line": 2,
+      "rule": "sequential-nonblocking-assignment",
+      "explanation": "always_ff 블록에서 blocking
+                      assignment가 사용되었습니다.",
+      "suggestedFix": "q &lt;= d; 로 변경하고
+                       시뮬레이션으로 동작을 재확인합니다."
+    }
+  ]
+}</div>
+        </div>
+      </div>
+      <div class="muted" style="font-size: 12px;">시나리오 <span class="mono">MEM-DEMO-A0 · rtl-v0.3</span> · 모든 코드와 값은 시연용 가상 데이터입니다.</div>
+    </div>
+
+    <!-- 호환성 -->
+    <div class="section">
+      <div class="h2">호환 LLM · API</div>
+      <div class="muted" style="font-size: 13px; margin-top: -8px;">변환 대상 후보입니다. 실제 API 업로드나 모델별 실행 검증 완료를 의미하지 않습니다.</div>
+      <div style="border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
+        <table>
+          <thead><tr><th>대상</th><th>전달 방식</th><th>변환</th><th>검증</th><th style="text-align: right;">최근 확인</th></tr></thead>
+          <tr><td style="font-weight: 500;">OpenAI</td><td class="mono muted">SKILL_BUNDLE</td><td><span class="badge"><span class="dot" style="background: #999999;"></span>후보</span></td><td><span class="badge"><span class="dot" style="background: #999999;"></span>NOT_VALIDATED</span></td><td class="muted" style="text-align: right;">—</td></tr>
+          <tr><td style="font-weight: 500;">Anthropic</td><td class="mono muted">SKILL_BUNDLE</td><td><span class="badge"><span class="dot" style="background: #999999;"></span>후보</span></td><td><span class="badge"><span class="dot" style="background: #999999;"></span>NOT_VALIDATED</span></td><td class="muted" style="text-align: right;">—</td></tr>
+          <tr><td style="font-weight: 500;">Gemini</td><td class="mono muted">FUNCTION_OR_PROMPT</td><td><span class="badge"><span class="dot" style="background: #999999;"></span>후보</span></td><td><span class="badge"><span class="dot" style="background: #999999;"></span>NOT_VALIDATED</span></td><td class="muted" style="text-align: right;">—</td></tr>
+          <tr><td style="font-weight: 500;">Ollama <span class="muted" style="font-weight: 400;">· 로컬</span></td><td class="mono muted">OPENAI_COMPATIBLE_TOOL_OR_PROMPT</td><td><span class="badge"><span class="dot" style="background: #999999;"></span>후보</span></td><td><span class="badge"><span class="dot" style="background: #999999;"></span>NOT_VALIDATED</span></td><td class="muted" style="text-align: right;">—</td></tr>
+        </table>
+      </div>
+      <div class="muted" style="display: flex; gap: 18px; font-size: 12px;">
+        <span><span class="dot" style="background: #999999; margin-right: 6px;"></span>후보 · 미검증</span>
+        <span><span class="dot" style="background: #f5a623; margin-right: 6px;"></span>SCHEMA_VALIDATED</span>
+        <span><span class="dot" style="background: #0f6e56; margin-right: 6px;"></span>EXECUTION_VERIFIED</span>
+      </div>
+    </div>
+
+    <!-- 검증·경계 -->
+    <div class="section">
+      <div class="h2">검증 기준 · 경계</div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div class="h3">성공 기준</div>
+          <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0f6e56" stroke-width="1.6"><path d="M3 8.5l3 3 7-7"></path></svg><span>지적이 코드 위치와 연결됨</span></div>
+          <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0f6e56" stroke-width="1.6"><path d="M3 8.5l3 3 7-7"></path></svg><span>수정 후 재검증 항목을 제시함</span></div>
+        </div>
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div class="h3">하지 않는 것</div>
+          <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#999999" stroke-width="1.6"><path d="M4 4l8 8M12 4l-8 8"></path></svg><span>lint · simulation · formal verification을 실제 실행하지 않음</span></div>
+          <div style="display: flex; gap: 10px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#999999" stroke-width="1.6"><path d="M4 4l8 8M12 4l-8 8"></path></svg><span>합성·타이밍 통과를 주장하지 않음</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 연결 스킬 -->
+    <div class="section">
+      <div class="h2">연결 스킬 · 워크플로우</div>
+      <div class="muted" style="font-size: 13px; margin-top: -8px;">이 스킬의 출력이 다음 단계의 입력이 됩니다.</div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr); gap: 8px; align-items: stretch;">
+        <div style="border: 1.5px solid #171717; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; background: #fafafa;"><span class="h3">DESIGN · 현재</span><span style="font-weight: 500;">SystemVerilog RTL 기본 리뷰</span><span class="muted" style="font-size: 12px;">DIAGNOSTIC</span></div>
+        <div style="display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="1.5"><path d="M4 12h14M13 7l5 5-5 5"></path></svg></div>
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;"><span class="h3">DESIGN</span><span style="font-weight: 500;">기능 보존 HDL 리팩토링</span><span class="muted" style="font-size: 12px;">CODE_TRANSFORM</span></div>
+        <div style="display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="1.5"><path d="M4 12h14M13 7l5 5-5 5"></path></svg></div>
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;"><span class="h3">VERIFICATION</span><span style="font-weight: 500;">RTL 테스트벤치 시나리오 초안</span><span class="muted" style="font-size: 12px;">CHECKLIST</span></div>
+        <div style="display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999999" stroke-width="1.5"><path d="M4 12h14M13 7l5 5-5 5"></path></svg></div>
+        <div style="border: 1px solid #eaeaea; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;"><span class="h3">VERIFICATION</span><span style="font-weight: 500;">RTL 시뮬레이션 디버깅 가이드</span><span class="muted" style="font-size: 12px;">DIAGNOSTIC</span></div>
+      </div>
+    </div>
+
+    <div class="muted" style="font-size: 12px; padding-top: 32px; border-top: 1px solid #eaeaea;">All code, measurements, equipment identifiers, operating ranges, and documents are synthetic demonstration data. No skill executes EDA software, changes equipment settings, or authorizes production use.</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

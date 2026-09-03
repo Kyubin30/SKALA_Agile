@@ -1,0 +1,7 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1200, "h": 1900, "title": "스킬 상세 (받기 전)", "expand": "fill" },
+    { "file": "Card.dc.html", "x": 1300, "y": 0, "w": 420, "h": 300, "title": "카탈로그 카드" }
+  ],
+  "launch": { "view": "canvas" }
+}
