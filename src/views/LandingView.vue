@@ -2,292 +2,275 @@
   <div class="landing">
     <AppHeader />
 
-    <!-- 히어로 섹션 -->
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="hero-content fade-in-up">
-          <span class="hero-badge">MSA 기반 교육 플랫폼</span>
-          <h1 class="hero-title">배움을 더 스마트하게,<br>커리어를 더 빠르게</h1>
-          <p class="hero-desc">개발, 디자인, 비즈니스 분야의 전문가 강의를 수강하고 실력을 키워보세요.</p>
-          <div class="hero-actions">
-            <router-link to="/login" class="btn btn-primary btn-lg">무료로 시작하기</router-link>
-            <router-link to="/courses" class="btn btn-outline btn-lg">강의 둘러보기</router-link>
-          </div>
-          <div class="hero-stats">
-            <div class="stat"><span class="stat-num">1,200+</span><span class="stat-label">강의</span></div>
-            <div class="stat"><span class="stat-num">340+</span><span class="stat-label">강사</span></div>
-            <div class="stat"><span class="stat-num">28,000+</span><span class="stat-label">수강생</span></div>
-          </div>
-        </div>
-        <div class="hero-visual fade-in">
-          <img src="@/assets/images/logo/main_logo.png" alt="LearnNexus" class="hero-logo" />
-        </div>
-      </div>
-    </section>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="shell hero-inner">
+          <p class="eyebrow"><span aria-hidden="true">$</span> learnnexus --discover</p>
+          <h1 id="hero-title">배움에 필요한 강의를<br />한곳에서 탐색하세요.</h1>
+          <p class="hero-description">
+            개발, 디자인, 비즈니스 분야의 실무 강의를 찾고<br class="desktop-break" />
+            나에게 맞는 학습 경로를 시작해 보세요.
+          </p>
 
-    <!-- 인기 강의 -->
-    <section class="popular-section">
-      <div class="section-inner">
-        <div class="section-header">
-          <h2 class="section-title">인기 강의</h2>
-          <router-link to="/login" class="section-link">전체 보기 →</router-link>
-        </div>
-        <div class="course-grid">
-          <div v-for="course in featuredCourses" :key="course.id" class="course-card-landing">
-            <div class="card-thumb" :class="course.thumbBg">
-              <img :src="course.thumbSrc" :alt="course.title" class="thumb-img" />
+          <form class="course-search" role="search" @submit.prevent="submitSearch">
+            <label class="sr-only" for="landing-search">강의 검색</label>
+            <span class="prompt" aria-hidden="true">&gt;</span>
+            <input
+              id="landing-search"
+              ref="searchInput"
+              v-model.trim="searchQuery"
+              type="search"
+              placeholder="강의명 또는 강사명 검색"
+              autocomplete="off"
+            />
+            <kbd>/</kbd>
+            <button type="submit">검색</button>
+          </form>
+
+          <div class="hero-links" aria-label="빠른 이동">
+            <router-link to="/login">시작하기 <span aria-hidden="true">&#8599;</span></router-link>
+            <router-link to="/courses">전체 강의 보기 <span aria-hidden="true">&#8594;</span></router-link>
+          </div>
+
+          <dl class="stats" aria-label="LearnNexus 현황">
+            <div v-for="stat in stats" :key="stat.label">
+              <dt>{{ stat.label }}</dt>
+              <dd>{{ stat.value }}</dd>
             </div>
-            <div class="card-body">
-              <span class="badge" :class="course.badgeClass">{{ course.category }}</span>
-              <h3 class="card-title">{{ course.title }}</h3>
-              <div class="card-meta">
-                <span class="instructor">{{ course.instructor }}</span>
-                <span class="price">{{ course.price }}</span>
-              </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="directory shell" aria-labelledby="popular-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">/featured</p>
+            <h2 id="popular-title">인기 강의</h2>
+          </div>
+          <router-link to="/courses" class="text-link">전체 보기 <span aria-hidden="true">&#8594;</span></router-link>
+        </div>
+
+        <div class="course-list">
+          <div class="course-list-head" aria-hidden="true">
+            <span>강의</span>
+            <span>분야</span>
+            <span>강사</span>
+            <span class="align-right">가격</span>
+          </div>
+          <router-link
+            v-for="(course, index) in featuredCourses"
+            :key="course.id"
+            :to="`/courses/${course.id}`"
+            class="course-row"
+          >
+            <span class="course-name"><span class="rank">{{ String(index + 1).padStart(2, '0') }}</span>{{ course.title }}</span>
+            <span class="category">{{ course.category }}</span>
+            <span class="muted">{{ course.instructor }}</span>
+            <span class="course-price">{{ course.price }}</span>
+          </router-link>
+        </div>
+      </section>
+
+      <section class="principles">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">/why-learnnexus</p>
+              <h2>학습에만 집중할 수 있도록</h2>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 특징 섹션 -->
-    <section class="features-section">
-      <div class="section-inner">
-        <h2 class="section-title center">왜 LearnNexus인가요?</h2>
-        <div class="features-grid">
-          <div v-for="f in features" :key="f.title" class="feature-card">
-            <div class="feature-icon">{{ f.icon }}</div>
-            <h3 class="feature-title">{{ f.title }}</h3>
-            <p class="feature-desc">{{ f.desc }}</p>
+          <div class="principle-grid">
+            <article v-for="(feature, index) in features" :key="feature.title">
+              <span class="feature-index">0{{ index + 1 }}</span>
+              <h3>{{ feature.title }}</h3>
+              <p>{{ feature.desc }}</p>
+            </article>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- CTA -->
-    <section class="cta-section">
-      <div class="cta-inner">
-        <h2>지금 바로 시작하세요</h2>
-        <p>수천 명의 개발자들이 LearnNexus와 함께 성장하고 있습니다.</p>
-        <router-link to="/login" class="btn btn-primary btn-lg">무료로 시작하기</router-link>
-      </div>
-    </section>
+      <section class="bottom-cta shell" aria-labelledby="cta-title">
+        <p class="section-kicker">/start</p>
+        <h2 id="cta-title">다음 강의를 찾을 준비가 되셨나요?</h2>
+        <router-link to="/login" class="command-link">
+          <span aria-hidden="true">$</span> learnnexus start
+          <span class="command-arrow" aria-hidden="true">&#8594;</span>
+        </router-link>
+      </section>
+    </main>
 
-    <!-- 푸터 -->
     <footer class="footer">
-      <div class="footer-inner">
-        <div class="footer-logo">
-          <img src="@/assets/images/logo/main_logo.png" alt="LearnNexus" />
-          <span>LearnNexus</span>
-        </div>
-        <p class="footer-copy">© 2026 LearnNexus. All rights reserved.</p>
+      <div class="shell footer-inner">
+        <strong>LearnNexus</strong>
+        <span>&copy; 2026 LearnNexus</span>
       </div>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
 
-import springImg   from '@/assets/images/courses/spring_boot.png'
-import vueImg      from '@/assets/images/courses/vue_js.png'
-import k8sImg      from '@/assets/images/courses/kubernetes.png'
-import dockerImg   from '@/assets/images/courses/docker.png'
-import pythonImg   from '@/assets/images/courses/python.png'
-import genaiImg    from '@/assets/images/courses/generative_ai.png'
+const router = useRouter()
+const searchInput = ref(null)
+const searchQuery = ref('')
+
+const stats = [
+  { value: '1,200+', label: '강의' },
+  { value: '340+', label: '강사' },
+  { value: '28,000+', label: '수강생' },
+]
 
 const featuredCourses = [
-  { id:1, title:'Spring Boot MSA 완성', category:'백엔드',    instructor:'김강사', price:'₩89,000', thumbSrc: springImg, thumbBg:'thumb-teal',   badgeClass:'badge-teal'   },
-  { id:2, title:'Vue 3 실전 프로젝트',  category:'프론트엔드', instructor:'이강사', price:'₩69,000', thumbSrc: vueImg,    thumbBg:'thumb-teal',   badgeClass:'badge-teal'   },
-  { id:3, title:'Kubernetes 운영 가이드',category:'DevOps',   instructor:'박강사', price:'₩99,000', thumbSrc: k8sImg,    thumbBg:'thumb-blue',   badgeClass:'badge-blue'   },
-  { id:4, title:'Docker 컨테이너 실전', category:'DevOps',    instructor:'정강사', price:'₩79,000', thumbSrc: dockerImg, thumbBg:'thumb-blue',   badgeClass:'badge-blue'   },
-  { id:5, title:'Python 데이터 분석',   category:'데이터',    instructor:'최강사', price:'₩59,000', thumbSrc: pythonImg, thumbBg:'thumb-purple', badgeClass:'badge-purple' },
-  { id:6, title:'Generative AI 실전',   category:'AI',        instructor:'한강사', price:'₩75,000', thumbSrc: genaiImg,  thumbBg:'thumb-pink',   badgeClass:'badge-pink'   },
+  { id: 1, title: 'Spring Boot MSA 완성', category: '백엔드', instructor: '김강사', price: '₩89,000' },
+  { id: 2, title: 'Vue 3 실전 프로젝트', category: '프론트엔드', instructor: '이강사', price: '₩69,000' },
+  { id: 3, title: 'Kubernetes 운영 가이드', category: 'DevOps', instructor: '박강사', price: '₩99,000' },
+  { id: 4, title: 'Docker 컨테이너 실전', category: 'DevOps', instructor: '정강사', price: '₩79,000' },
+  { id: 5, title: 'Python 데이터 분석', category: '데이터', instructor: '최강사', price: '₩59,000' },
+  { id: 6, title: 'Generative AI 실전', category: 'AI', instructor: '한강사', price: '₩75,000' },
 ]
 
 const features = [
-  { icon:'🚀', title:'실무 중심 커리큘럼', desc:'현업 전문가가 직접 설계한 실무 중심 강의로 빠르게 성장하세요.' },
-  { icon:'🎯', title:'맞춤 강의 추천', desc:'AI 기반 추천 시스템이 수강 이력을 분석해 딱 맞는 강의를 추천합니다.' },
-  { icon:'💳', title:'간편한 수강 신청', desc:'원클릭 결제와 즉시 수강으로 학습을 바로 시작하세요.' },
-  { icon:'📱', title:'언제 어디서나', desc:'PC, 태블릿, 모바일 어디서든 끊김 없이 학습하세요.' },
+  { title: '실무 중심 커리큘럼', desc: '현업 전문가가 설계한 실전 프로젝트로 배웁니다.' },
+  { title: '맞춤 강의 탐색', desc: '관심 분야와 학습 이력에 맞는 강의를 빠르게 찾습니다.' },
+  { title: '간편한 수강 신청', desc: '복잡한 절차 없이 신청하고 바로 학습을 시작합니다.' },
+  { title: '언제 어디서나', desc: '다양한 화면에 맞춰 필요한 강의를 이어서 수강합니다.' },
 ]
+
+function submitSearch() {
+  router.push({ path: '/courses', query: searchQuery.value ? { q: searchQuery.value } : {} })
+}
+
+function handleShortcut(event) {
+  const target = event.target
+  const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable
+
+  if (event.key === '/' && !isTyping) {
+    event.preventDefault()
+    searchInput.value?.focus()
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', handleShortcut))
+onBeforeUnmount(() => window.removeEventListener('keydown', handleShortcut))
 </script>
 
 <style scoped>
-.landing { background: var(--color-bg-secondary); }
-
-/* 히어로 */
-.hero {
-  background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 50%, #f0f9ff 100%);
-  border-bottom: 1px solid var(--color-border);
-  padding: 80px 0 64px;
-}
-.hero-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 48px;
-  align-items: center;
-}
-.hero-badge {
-  display: inline-block;
-  padding: 5px 14px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-.hero-title {
-  font-size: 42px;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.5px;
-  color: var(--color-text-primary);
-  margin-bottom: 16px;
-}
-.hero-desc {
-  font-size: 16px;
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  max-width: 460px;
-  margin-bottom: 28px;
-}
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 40px;
-}
-.btn-lg { padding: 12px 28px; font-size: 15px; }
-.hero-stats {
-  display: flex;
-  gap: 36px;
-}
-.stat { display: flex; flex-direction: column; gap: 2px; }
-.stat-num { font-size: 22px; font-weight: 700; color: var(--color-primary); }
-.stat-label { font-size: 12px; color: var(--color-text-secondary); }
-.hero-visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.hero-logo {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-  border-radius: 24px;
-  box-shadow: var(--shadow-lg);
+.landing {
+  --page-bg: #000000;
+  --page-surface: #0a0a0a;
+  --page-border: #333333;
+  --page-text: #ededed;
+  --page-muted: #a1a1a1;
+  --page-subtle: #777777;
+  --page-hover: #111111;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  min-height: 100vh;
+  color-scheme: dark;
+  color: var(--page-text);
+  background: var(--page-bg);
+  --color-bg-primary: var(--page-bg);
+  --color-bg-secondary: var(--page-bg);
+  --color-bg-tertiary: var(--page-hover);
+  --color-text-primary: var(--page-text);
+  --color-text-secondary: var(--page-muted);
+  --color-border: var(--page-border);
+  --color-primary: var(--page-text);
+  --color-primary-light: var(--page-hover);
 }
 
-/* 강의 섹션 */
-.popular-section { padding: 64px 0; }
-.section-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.section-title { font-size: 22px; font-weight: 700; color: var(--color-text-primary); }
-.section-title.center { text-align: center; margin-bottom: 40px; }
-.section-link { font-size: 14px; color: var(--color-primary); font-weight: 500; }
-.section-link:hover { text-decoration: underline; }
+.shell { width: min(100% - 48px, 1040px); margin-inline: auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.hero { border-bottom: 1px solid var(--page-border); }
+.hero-inner { padding-block: 104px 80px; }
+.eyebrow, .section-kicker { font-family: var(--mono); color: var(--page-muted); font-size: 13px; letter-spacing: -0.01em; }
+.eyebrow span { color: var(--page-text); }
+.hero h1 { max-width: 760px; margin: 20px 0; font-size: clamp(42px, 6vw, 68px); font-weight: 650; line-height: 1.08; letter-spacing: -0.055em; }
+.hero-description { color: var(--page-muted); font-size: 17px; line-height: 1.7; }
+.course-search { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; width: min(100%, 680px); margin-top: 36px; border: 1px solid var(--page-border); background: var(--page-surface); }
+.prompt { padding-left: 16px; font-family: var(--mono); color: var(--page-text); }
+.course-search input { width: 100%; min-width: 0; padding: 15px 12px; border: 0; outline: 0; color: var(--page-text); background: transparent; font: 14px/1.4 var(--mono); }
+.course-search input::placeholder { color: var(--page-subtle); }
+.course-search input::-webkit-search-cancel-button { display: none; }
+.course-search:focus-within { border-color: var(--page-text); box-shadow: 0 0 0 1px var(--page-text); }
+.course-search kbd { padding: 2px 6px; border: 1px solid var(--page-border); border-radius: 4px; color: var(--page-muted); background: var(--page-bg); font: 11px var(--mono); }
+.course-search button { align-self: stretch; margin-left: 12px; padding: 0 20px; border-left: 1px solid var(--page-border); color: var(--page-bg); background: var(--page-text); font-size: 13px; }
+.course-search button:hover { opacity: 0.82; }
+.hero-links { display: flex; gap: 24px; margin-top: 24px; font-size: 13px; }
+.hero-links a { text-decoration: underline; text-decoration-color: var(--page-border); text-underline-offset: 4px; }
+.hero-links a:hover { text-decoration-color: currentColor; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 680px; margin-top: 72px; border-block: 1px solid var(--page-border); }
+.stats div { display: flex; flex-direction: column-reverse; padding: 20px 0; }
+.stats div + div { padding-left: 24px; border-left: 1px solid var(--page-border); }
+.stats dt { margin-top: 3px; color: var(--page-muted); font-size: 12px; }
+.stats dd { font-family: var(--mono); font-size: 22px; font-variant-numeric: tabular-nums; }
+.directory { padding-block: 88px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.section-heading h2, .bottom-cta h2 { margin-top: 7px; font-size: 26px; line-height: 1.25; letter-spacing: -0.035em; }
+.text-link { flex-shrink: 0; color: var(--page-muted); font-size: 13px; }
+.text-link:hover { color: var(--page-text); }
+.course-list { border-top: 1px solid var(--page-text); }
+.course-list-head, .course-row { display: grid; grid-template-columns: minmax(0, 2fr) 0.7fr 0.7fr 0.7fr; gap: 20px; align-items: center; }
+.course-list-head { padding: 10px 12px; border-bottom: 1px solid var(--page-border); color: var(--page-subtle); font-size: 11px; }
+.course-row { padding: 15px 12px; border-bottom: 1px solid var(--page-border); font-size: 13px; transition: background-color 140ms ease; }
+.course-row:hover, .course-row:focus-visible { outline: 0; background: var(--page-hover); }
+.course-name { min-width: 0; overflow: hidden; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.rank { display: inline-block; width: 34px; color: var(--page-subtle); font: 11px var(--mono); }
+.category, .muted { overflow: hidden; color: var(--page-muted); text-overflow: ellipsis; white-space: nowrap; }
+.align-right, .course-price { text-align: right; }
+.course-price { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.principles { padding-block: 80px; border-block: 1px solid var(--page-border); background: var(--page-surface); }
+.principle-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--page-border); border-left: 1px solid var(--page-border); }
+.principle-grid article { min-height: 210px; padding: 24px; border-right: 1px solid var(--page-border); border-bottom: 1px solid var(--page-border); background: var(--page-bg); }
+.feature-index { color: var(--page-subtle); font: 11px var(--mono); }
+.principle-grid h3 { margin: 46px 0 10px; font-size: 14px; }
+.principle-grid p { color: var(--page-muted); font-size: 13px; line-height: 1.65; }
+.bottom-cta { padding-block: 96px; text-align: center; }
+.bottom-cta h2 { margin-bottom: 28px; }
+.command-link { display: inline-flex; align-items: center; width: min(100%, 430px); padding: 15px 18px; border: 1px solid var(--page-text); text-align: left; font: 13px var(--mono); }
+.command-link:hover { color: var(--page-bg); background: var(--page-text); }
+.command-link > span:first-child { margin-right: 10px; color: var(--page-subtle); }
+.command-arrow { margin-left: auto; }
+.footer { border-top: 1px solid var(--page-border); }
+.footer-inner { display: flex; justify-content: space-between; padding-block: 28px; color: var(--page-muted); font: 11px var(--mono); }
+.footer strong { color: var(--page-text); font-weight: 500; }
+.landing :deep(.app-header) { background: color-mix(in srgb, var(--page-bg) 92%, transparent); }
+.landing :deep(.logo-img) { border-radius: 4px; filter: grayscale(1); }
+.landing :deep(.logo-text) { letter-spacing: -0.04em; }
+.landing :deep(.nav-link), .landing :deep(.btn) { border-radius: 4px; }
+.landing :deep(.btn-primary) { color: var(--page-bg); }
+.landing :deep(.user-avatar:hover) { color: var(--page-bg); }
 
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+@media (max-width: 760px) {
+  .shell { width: min(100% - 32px, 1040px); }
+  .hero-inner { padding-block: 72px 56px; }
+  .hero h1 { font-size: clamp(38px, 12vw, 52px); }
+  .desktop-break { display: none; }
+  .stats { margin-top: 52px; }
+  .course-list-head { display: none; }
+  .course-row { grid-template-columns: minmax(0, 1fr) auto; gap: 5px 16px; }
+  .course-name { grid-column: 1 / -1; }
+  .muted { display: none; }
+  .course-price { grid-column: 2; grid-row: 2; }
+  .principle-grid { grid-template-columns: repeat(2, 1fr); }
 }
-.course-card-landing {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: var(--transition);
-}
-.course-card-landing:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-.card-thumb {
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-.thumb-teal   { background: #E1F5EE; }
-.thumb-blue   { background: #E6F1FB; }
-.thumb-purple { background: #EEEDFE; }
-.thumb-pink   { background: #FBEAF0; }
-.thumb-img { width: 100%; height: 100%; object-fit: contain; padding: 14px; }
-.card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
-.card-title { font-size: 14px; font-weight: 600; color: var(--color-text-primary); line-height: 1.4; }
-.card-meta { display: flex; justify-content: space-between; align-items: center; }
-.instructor { font-size: 12px; color: var(--color-text-secondary); }
-.price { font-size: 14px; font-weight: 600; color: var(--color-primary); }
 
-/* 특징 */
-.features-section { padding: 64px 0; background: var(--color-bg-primary); }
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+@media (max-width: 520px) {
+  .course-search { grid-template-columns: auto 1fr auto; }
+  .course-search kbd { display: none; }
+  .course-search button { margin-left: 0; padding-inline: 14px; }
+  .hero-links { flex-direction: column; gap: 10px; }
+  .stats dd { font-size: 18px; }
+  .stats div + div { padding-left: 14px; }
+  .principle-grid { grid-template-columns: 1fr; }
+  .principle-grid article { min-height: 170px; }
+  .principle-grid h3 { margin-top: 28px; }
+  .footer-inner { gap: 20px; }
 }
-.feature-card {
-  padding: 28px 24px;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  text-align: center;
-  transition: var(--transition);
-}
-.feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.feature-icon { font-size: 32px; margin-bottom: 12px; }
-.feature-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
-.feature-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
 
-/* CTA */
-.cta-section {
-  padding: 80px 0;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  text-align: center;
+@media (prefers-reduced-motion: reduce) {
+  .course-row { transition: none; }
 }
-.cta-inner { max-width: 600px; margin: 0 auto; padding: 0 24px; }
-.cta-inner h2 { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-.cta-inner p { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 32px; }
-.cta-inner .btn-primary {
-  background: #fff;
-  color: var(--color-primary);
-  border-color: #fff;
-  font-weight: 600;
-}
-.cta-inner .btn-primary:hover { background: #f0f7ff; }
-
-/* 푸터 */
-.footer {
-  background: var(--color-text-primary);
-  padding: 32px 0;
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-}
-.footer-logo img { width: 28px; height: 28px; border-radius: 6px; }
-.footer-copy { font-size: 13px; color: rgba(255,255,255,0.5); }
 </style>

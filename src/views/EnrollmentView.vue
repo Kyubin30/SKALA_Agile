@@ -7,15 +7,11 @@
           <div class="sidebar-label">메뉴</div>
 
           <router-link to="/courses" class="sidebar-item">
-            <span class="si-icon">📚</span> 강의 목록
+            <span class="si-icon">📚</span> 자산 목록
           </router-link>
 
-          <router-link
-            v-if="!isInstructor"
-            to="/enrollments"
-            class="sidebar-item active"
-          >
-            <span class="si-icon">✅</span> 내 수강 목록
+          <router-link to="/enrollments" class="sidebar-item active">
+            <span class="si-icon">✅</span> 내 사용 목록
           </router-link>
 
           <router-link to="/mypage" class="sidebar-item">
@@ -35,7 +31,7 @@
       </aside>
 
       <main class="main-content">
-        <h1 class="page-title">내 수강 목록</h1>
+        <h1 class="page-title">내 사용 목록</h1>
 
         <div v-if="loading" class="loading-center">
           <div class="spinner"></div>
@@ -52,7 +48,7 @@
                 {{ item.course?.category }}
               </span>
               <h3 class="enroll-title">{{ item.course?.title }}</h3>
-              <p class="enroll-instructor">강사: {{ item.course?.instructorName }}</p>
+              <p class="enroll-instructor">작성자: {{ item.course?.instructorName }}</p>
             </div>
 
             <div class="enroll-status">
@@ -62,10 +58,10 @@
                   item.status === 'ACTIVE' ? 'status-active' : 'status-pending'
                 ]"
               >
-                {{ item.status === 'ACTIVE' ? '수강 중' : '대기 중' }}
+                {{ item.status === 'ACTIVE' ? '사용 중' : '대기 중' }}
               </span>
               <router-link :to="`/courses/${item.courseId}`" class="btn btn-ghost btn-sm">
-                강의 보기
+                자산 보기
               </router-link>
             </div>
           </div>
@@ -73,9 +69,9 @@
 
         <div v-else class="empty-state">
           <p class="empty-icon">📭</p>
-          <p>수강 중인 강의가 없습니다.</p>
+          <p>아직 사용 중인 자산이 없습니다.</p>
           <router-link to="/courses" class="btn btn-primary" style="margin-top:16px;">
-            강의 둘러보기
+            자산 둘러보기
           </router-link>
         </div>
       </main>
@@ -84,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '@/components/AppHeader.vue'
 import { enrollmentApi } from '@/api/enrollment.js'
@@ -95,8 +91,6 @@ const auth = useAuthStore()
 
 const enrollments = ref([])
 const loading = ref(true)
-
-const isInstructor = computed(() => auth.user?.role === 'INSTRUCTOR')
 
 const categoryConfig = {
   '백엔드': { bg: 'thumb-teal', badge: 'badge-teal', thumb: 'spring_boot' },
@@ -130,13 +124,6 @@ function handleLogout() {
 }
 
 onMounted(async () => {
-  // 강사는 이 페이지 접근 불가 → 마이페이지로 이동
-  if (isInstructor.value) {
-    console.warn('[EnrollmentView] instructor tried to access /enrollments, redirect to /mypage')
-    router.replace('/mypage')
-    return
-  }
-
   try {
     const res = await enrollmentApi.getMyEnrollments()
     console.log('[EnrollmentView] my enrollments response:', res.data)
@@ -158,9 +145,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* 이 화면만 design.md(터미널/모노크롬) 톤을 색상 값으로 직접 지정한다. global.css는 안 건드림. */
+
 .page-wrapper {
   min-height: 100vh;
-  background: var(--color-bg-secondary);
+  background: #000000;
+  color: #EDEDED;
+  font-family: 'Geist', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .page-layout {
@@ -190,7 +183,7 @@ onMounted(async () => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-text-muted);
+  color: #7D7D7D;
   padding: 8px 12px 4px;
 }
 
@@ -199,27 +192,27 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   padding: 9px 12px;
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   font-size: 14px;
-  color: var(--color-text-secondary);
-  transition: var(--transition);
+  color: #A1A1A1;
+  transition: all 0.2s ease;
   background: none;
   border: none;
   width: 100%;
   text-align: left;
   cursor: pointer;
-  font-family: var(--font-sans);
+  font-family: inherit;
   text-decoration: none;
 }
 
 .sidebar-item:hover {
-  background: var(--color-bg-tertiary);
-  color: var(--color-text-primary);
+  background: #161616;
+  color: #EDEDED;
 }
 
 .sidebar-item.active {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: rgba(255,255,255,0.10);
+  color: #FFFFFF;
   font-weight: 500;
 }
 
@@ -247,21 +240,21 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background: #0A0A0A;
+  border: 1px solid #2E2E2E;
+  border-radius: 12px;
   padding: 16px;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 
 .enrollment-card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 0 rgba(255,255,255,.06);
 }
 
 .enroll-thumb {
   width: 72px;
   height: 72px;
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -277,23 +270,23 @@ onMounted(async () => {
 }
 
 .thumb-teal {
-  background: #E1F5EE;
+  background: #0F2A24;
 }
 
 .thumb-blue {
-  background: #E6F1FB;
+  background: #142A3F;
 }
 
 .thumb-purple {
-  background: #EEEDFE;
+  background: #211C3D;
 }
 
 .thumb-pink {
-  background: #FBEAF0;
+  background: #34131F;
 }
 
 .thumb-gray {
-  background: #F1EFE8;
+  background: #232220;
 }
 
 .enroll-info {
@@ -310,7 +303,7 @@ onMounted(async () => {
 
 .enroll-instructor {
   font-size: 13px;
-  color: var(--color-text-secondary);
+  color: #A1A1A1;
 }
 
 .enroll-status {
@@ -328,13 +321,13 @@ onMounted(async () => {
 }
 
 .status-active {
-  background: #E1F5EE;
-  color: #0F6E56;
+  background: #0F2A24;
+  color: #4FD8B0;
 }
 
 .status-pending {
-  background: #FAEEDA;
-  color: #854F0B;
+  background: #3A2A08;
+  color: #F2B94A;
 }
 
 .btn-sm {
@@ -345,7 +338,7 @@ onMounted(async () => {
 .empty-state {
   text-align: center;
   padding: 80px 0;
-  color: var(--color-text-muted);
+  color: #7D7D7D;
 }
 
 .empty-icon {
@@ -362,8 +355,8 @@ onMounted(async () => {
 .spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid var(--color-border);
-  border-top-color: var(--color-primary);
+  border: 3px solid #2E2E2E;
+  border-top-color: #FFFFFF;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -373,4 +366,28 @@ onMounted(async () => {
     transform: rotate(360deg);
   }
 }
+
+/* 이 화면에서 쓰는 전역 버튼/뱃지 클래스도 다크 톤으로 직접 지정한다 (global.css는 안 건드림) */
+.btn-primary {
+  background: #FFFFFF;
+  color: #0A0A0A;
+  border-color: #FFFFFF;
+}
+.btn-primary:hover {
+  background: #D0D0D0;
+  border-color: #D0D0D0;
+}
+.btn-ghost {
+  color: #A1A1A1;
+  border-color: #2E2E2E;
+}
+.btn-ghost:hover {
+  background: #161616;
+  border-color: #444444;
+}
+.badge-teal   { background: #0F2A24; color: #4FD8B0; }
+.badge-blue   { background: #142A3F; color: #6EA8FF; }
+.badge-purple { background: #211C3D; color: #A79BFF; }
+.badge-pink   { background: #34131F; color: #F294B7; }
+.badge-gray   { background: #232220; color: #B8B5AC; }
 </style>
